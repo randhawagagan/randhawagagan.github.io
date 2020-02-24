@@ -155,7 +155,7 @@ TxtRotate.prototype.tick = function () {
   }, delta);
   if (this.loopNum === 5) {
     clearTimeout(timer);
-    classGet('section__title--intro', 0).innerText = 'Gagan Randhawa';
+    classGet('section__title--intro', 0).innerText = 'Front-End Engineer';
     //document.body.classList.toggle('nav-open'); add something here
     window.location.hash = 'skills';
   }
