@@ -153,7 +153,7 @@ TxtRotate.prototype.tick = function () {
   const timer = setTimeout(function () {
     that.tick();
   }, delta);
-  if (this.loopNum === 5) {
+  if (this.loopNum === 6) {
     clearTimeout(timer);
     classGet('section__title--intro', 0).innerText = 'Front-End Engineer';
     //document.body.classList.toggle('nav-open'); add something here
