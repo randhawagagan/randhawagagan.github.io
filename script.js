@@ -1,34 +1,41 @@
 function App() {
   const conf = {
-    el: 'canvas',
+    el: "canvas",
     gravity: -0.2,
     nx: 100,
     ny: 40,
     size: 1.5,
     stiffness: 5,
     mouseRadius: 10,
-    mouseStrength: 0.4 };
-
+    mouseStrength: 0.4,
+  };
 
   let renderer, scene, camera;
   let width, height;
   const { randFloat: rnd, randFloatSpread: rndFS } = THREE.Math;
 
-  const mouse = new THREE.Vector2(),oldMouse = new THREE.Vector2();
-  const verlet = new VerletJS(),polylines = [];
-  const uCx = { value: 0 },uCy = { value: 0 };
+  const mouse = new THREE.Vector2(),
+    oldMouse = new THREE.Vector2();
+  const verlet = new VerletJS(),
+    polylines = [];
+  const uCx = { value: 0 },
+    uCy = { value: 0 };
 
   init();
 
   function init() {
-    renderer = new THREE.WebGLRenderer({ canvas: document.getElementById(conf.el), antialias: true, alpha: true });
+    renderer = new THREE.WebGLRenderer({
+      canvas: document.getElementById(conf.el),
+      antialias: true,
+      alpha: true,
+    });
     camera = new THREE.PerspectiveCamera();
 
     verlet.width = 256;
     verlet.height = 256;
 
     updateSize();
-    window.addEventListener('resize', updateSize, false);
+    window.addEventListener("resize", updateSize, false);
 
     initScene();
     initListeners();
@@ -40,9 +47,6 @@ function App() {
     verlet.gravity = new Vec2(0, conf.gravity);
 
     const loader = new THREE.TextureLoader();
-    // loader.load('https://klevron.github.io/codepen/misc/curtain.jpg', texture => {
-    //   initCurtain(texture);
-    // })
     initCurtain();
   }
 
@@ -50,9 +54,11 @@ function App() {
     const material = new THREE.ShaderMaterial({
       transparent: true,
       uniforms: {
-        uCx, uCy,
+        uCx,
+        uCy,
         // tDiffuse: { value: texture },
-        uSize: { value: conf.size / conf.nx } },
+        uSize: { value: conf.size / conf.nx },
+      },
 
       vertexShader: `
         uniform float uCx;
@@ -96,11 +102,13 @@ function App() {
           // gl_FragColor = tex;
           gl_FragColor = vColor;
         }
-      ` });
+      `,
+    });
 
-
-    const dx = verlet.width / conf.nx,dy = -verlet.height / (conf.ny - 1);
-    const ox = -dx * (conf.nx / 2 - 0.5),oy = verlet.height / 2 - dy / 2;
+    const dx = verlet.width / conf.nx,
+      dy = -verlet.height / (conf.ny - 1);
+    const ox = -dx * (conf.nx / 2 - 0.5),
+      oy = verlet.height / 2 - dy / 2;
     // const cscale = chroma.scale([chroma.random(), chroma.random()]);
     // const cscale = chroma.scale([0x09256f, 0x6efec8]);
     const cscale = chroma.scale([0x051924, 0xc00a1c]);
@@ -108,11 +116,18 @@ function App() {
       const points = [];
       const vpoints = [];
       for (let j = 0; j < conf.ny; j++) {
-        const x = ox + i * dx,y = oy + j * dy;
+        const x = ox + i * dx,
+          y = oy + j * dy;
         points.push(new THREE.Vector3(x, y, 0));
         vpoints.push(new Vec2(x, y));
       }
-      const polyline = new Polyline({ points, color1: cscale(rnd(0, 1)), color2: cscale(rnd(0, 1)), uvx: (i + 1) / conf.nx, uvdx: conf.size / conf.nx });
+      const polyline = new Polyline({
+        points,
+        color1: cscale(rnd(0, 1)),
+        color2: cscale(rnd(0, 1)),
+        uvx: (i + 1) / conf.nx,
+        uvdx: conf.size / conf.nx,
+      });
       polylines.push(polyline);
 
       polyline.segment = verlet.lineSegments(vpoints, conf.stiffness);
@@ -132,7 +147,7 @@ function App() {
   }
 
   function updatePoints() {
-    polylines.forEach(line => {
+    polylines.forEach((line) => {
       for (let i = 0; i < line.points.length; i++) {
         const p = line.segment.particles[i].pos;
         line.points[i].x = p.x;
@@ -143,12 +158,13 @@ function App() {
   }
 
   function updateColors() {
-    const c1 = chroma.random(),c2 = chroma.random();
+    const c1 = chroma.random(),
+      c2 = chroma.random();
     const cscale = chroma.scale([c1, c2]);
     console.log(c1.hex(), c2.hex());
     // #21a25f #a0fa42
     // #09256f #6efec8
-    polylines.forEach(line => {
+    polylines.forEach((line) => {
       line.color1 = cscale(rnd(0, 1));
       line.color2 = cscale(rnd(0, 1));
       const cscale1 = chroma.scale([line.color1, line.color2]);
@@ -171,14 +187,14 @@ function App() {
   }
 
   function initListeners() {
-    if ('ontouchstart' in window) {
-      document.body.addEventListener('touchstart', updateMouse, false);
-      document.body.addEventListener('touchmove', move, false);
+    if ("ontouchstart" in window) {
+      document.body.addEventListener("touchstart", updateMouse, false);
+      document.body.addEventListener("touchmove", move, false);
     } else {
-      document.body.addEventListener('mouseenter', updateMouse, false);
-      document.body.addEventListener('mousemove', move, false);
+      document.body.addEventListener("mouseenter", updateMouse, false);
+      document.body.addEventListener("mousemove", move, false);
     }
-    document.body.addEventListener('click', updateColors, false);
+    document.body.addEventListener("click", updateColors, false);
   }
 
   function move(e) {
@@ -187,14 +203,16 @@ function App() {
   }
 
   function _move(oV, nV) {
-    const v1 = new THREE.Vector2(),v2 = new THREE.Vector2();
-    polylines.forEach(line => {
+    const v1 = new THREE.Vector2(),
+      v2 = new THREE.Vector2();
+    polylines.forEach((line) => {
       for (let i = 0; i < line.points.length; i++) {
         const p = line.segment.particles[i].pos;
         const l = v1.copy(oV).sub(v2.set(p.x, p.y)).length();
         if (l < conf.mouseRadius) {
           v1.copy(nV).sub(oV).multiplyScalar(conf.mouseStrength);
-          p.x += v1.x;p.y += v1.y;
+          p.x += v1.x;
+          p.y += v1.y;
         }
       }
     });
@@ -212,15 +230,16 @@ function App() {
 
     oldMouse.copy(mouse);
     mouse.set(
-    (e.x - width / 2) * verlet.width / width,
-    (height / 2 - e.y) * verlet.height / height);
-
+      ((e.x - width / 2) * verlet.width) / width,
+      ((height / 2 - e.y) * verlet.height) / height
+    );
   }
 
   function updateSize() {
     width = window.innerWidth;
     height = window.innerHeight;
-    uCx.value = 2 / verlet.width;uCy.value = 2 / verlet.height;
+    uCx.value = 2 / verlet.width;
+    uCy.value = 2 / verlet.height;
     renderer.setSize(width, height);
     // camera.aspect = width / height;
     // camera.updateProjectionMatrix();
@@ -228,7 +247,7 @@ function App() {
 }
 
 // adapted from https://github.com/oframe/ogl/blob/master/src/extras/Polyline.js
-const Polyline = function () {
+const Polyline = (function () {
   const tmp = new THREE.Vector3();
 
   class Polyline {
@@ -236,8 +255,10 @@ const Polyline = function () {
       const { points, color1, color2, uvx, uvdx } = params;
       this.points = points;
       this.count = points.length;
-      this.color1 = color1;this.color2 = color2;
-      this.uvx = uvx;this.uvdx = uvdx;
+      this.color1 = color1;
+      this.color2 = color2;
+      this.uvx = uvx;
+      this.uvdx = uvdx;
       this.init();
       this.updateGeometry();
     }
@@ -271,12 +292,21 @@ const Polyline = function () {
         index.set([i2 + 2, i2 + 1, i2 + 3], (i2 + 1) * 3);
       }
 
-      this.geometry.setAttribute('position', new THREE.BufferAttribute(this.position, 3));
-      this.geometry.setAttribute('color', new THREE.BufferAttribute(color, 3));
-      this.geometry.setAttribute('prev', new THREE.BufferAttribute(this.prev, 3));
-      this.geometry.setAttribute('next', new THREE.BufferAttribute(this.next, 3));
-      this.geometry.setAttribute('side', new THREE.BufferAttribute(side, 1));
-      this.geometry.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
+      this.geometry.setAttribute(
+        "position",
+        new THREE.BufferAttribute(this.position, 3)
+      );
+      this.geometry.setAttribute("color", new THREE.BufferAttribute(color, 3));
+      this.geometry.setAttribute(
+        "prev",
+        new THREE.BufferAttribute(this.prev, 3)
+      );
+      this.geometry.setAttribute(
+        "next",
+        new THREE.BufferAttribute(this.next, 3)
+      );
+      this.geometry.setAttribute("side", new THREE.BufferAttribute(side, 1));
+      this.geometry.setAttribute("uv", new THREE.BufferAttribute(uv, 2));
       this.geometry.setIndex(new THREE.BufferAttribute(index, 1));
     }
 
@@ -286,7 +316,10 @@ const Polyline = function () {
         p.toArray(this.position, i * 3 * 2 + 3);
 
         if (!i) {
-          tmp.copy(p).sub(this.points[i + 1]).add(p);
+          tmp
+            .copy(p)
+            .sub(this.points[i + 1])
+            .add(p);
           tmp.toArray(this.prev, i * 3 * 2);
           tmp.toArray(this.prev, i * 3 * 2 + 3);
         } else {
@@ -295,7 +328,10 @@ const Polyline = function () {
         }
 
         if (i === this.points.length - 1) {
-          tmp.copy(p).sub(this.points[i - 1]).add(p);
+          tmp
+            .copy(p)
+            .sub(this.points[i - 1])
+            .add(p);
           tmp.toArray(this.next, i * 3 * 2);
           tmp.toArray(this.next, i * 3 * 2 + 3);
         } else {
@@ -307,10 +343,10 @@ const Polyline = function () {
       this.geometry.attributes.position.needsUpdate = true;
       this.geometry.attributes.prev.needsUpdate = true;
       this.geometry.attributes.next.needsUpdate = true;
-    }}
-
+    }
+  }
 
   return Polyline;
-}();
+})();
 
 App();
