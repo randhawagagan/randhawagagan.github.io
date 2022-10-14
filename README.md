@@ -1,1 +1,2 @@
-## Site under construction...
+## Portfolio page built using Three.js and verlet-js
+

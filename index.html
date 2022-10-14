@@ -1,108 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <link rel="stylesheet" href="normalize.css" />
-    <link href=img/gr-header-dark.png rel=icon type=image/x-icon>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Gagan Randhawa</title>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css"
-      integrity="sha256-46qynGAkLSFpVbEBog43gvNhfrOj+BmwXdxFgVK/Kvc="
-      crossorigin="anonymous"
-    />
-    <link rel="stylesheet" href="css/style.css" />
-    <link
-      href="https://fonts.googleapis.com/css?family=Raleway:400,900|Roboto&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/icon?family=Material+Icons"
-    />
-  </head>
 
-  <body>
-    <header>
-      <div class="logo">
-        <img src="img/gr-small-light.png" alt="" />
-      </div>
-      <button class="nav-toggle" aria-label="toggle navigation">
-        <span class="hamburger"></span>
-      </button>
-      <nav class="nav">
-        <ul class="nav__list">
-          <li class="nav__item"><a href="#home" class="nav__link">Home</a></li>
-          <li class="nav__item">
-            <a href="#skills" class="nav__link">Skills</a>
-          </li>
-          <li class="nav__item">
-            <a href="#about" class="nav__link">Contact</a>
-          </li>
-          <!-- <li class="nav__item">
-            <a href="#work" class="nav__link">My Work</a>
-          </li> -->
-        </ul>
-      </nav>
-    </header>
+<head>
+  <meta charset="UTF-8">
+  <link href=gr-header-dark.png rel=icon type=image/x-icon>
+  <meta charset="UTF-8" />
+  <title>Gagan Randhawa &#9774</title>
+  <link rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Montserrat:wght@400;900&amp;display=swap'>
+  <link rel="stylesheet" href="style.css">
 
-    <!-- Introduction -->
-    <section class="intro" id="home">
-      <img src="img/mine.jpeg" alt="a picture smiling" class="intro__img" />
-      <p>
-        Website is currently undergoing maintenance. We should be back shortly.
-        <br />
-        Thank you for your patience.
-      </p>
-    </section>
+</head>
 
-    <!-- Footer -->
-    <footer class="footer" id="about">
-      <a href="mailto:hello@gaganrandhawa.me" class="footer__link"
-        >hello@gaganrandhawa.me</a
-      >
-      <!-- <p>Contact me</p> -->
-      <ul class="social-list">
-        <li class="social-list__item">
-          <a class="social-list__link" href="mailto:hello@gaganrandhawa.me">
-            <i class="fas fa-envelope"></i>
-          </a>
-        </li>
-        <li class="social-list__item">
-          <a
-            class="social-list__link"
-            href="https://www.linkedin.com/in/gaganrandhawa89/"
-          >
-            <i class="fab fa-linkedin-in"></i>
-          </a>
-        </li>
-        <li class="social-list__item">
-          <a class="social-list__link" href="https://github.com/randhawagagan">
-            <i class="fab fa-github"></i>
-          </a>
-        </li>
-        <li class="social-list__item">
-          <a
-            class="social-list__link"
-            href="https://medium.com/@gagan_randhawa"
-          >
-            <i class="fab fa-medium-m"></i>
-          </a>
-        </li>
-        <li class="social-list__item">
-          <a class="social-list__link" href="https://dev.to/randhawagagan">
-            <i class="fab fa-dev"></i>
-          </a>
-        </li>
-      </ul>
-    </footer>
+<body>
+  <!-- partial:index.partial.html -->
+  <canvas id="canvas"></canvas>
 
-    <script src="js/typed.min.js"></script>
-    <script src="js/index.js"></script>
-  </body>
+  <h1>Hi &#128075;, I am Gagan Randhawa</h1>
+  <p>Senior Front-End Developer</p>
+
+  <p class="collection">
+    <a href="mailto:hello@gaganrandhawa.me" target="_blank">hello@gaganrandhawa.me</a>
+  </p>
+  <!-- partial -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/chroma-js/2.0.3/chroma.min.js'></script>
+  <script src='verlet-1.0.0.min.js'></script>
+  <script src="script.js"></script>
+
+</body>
+
 </html>
