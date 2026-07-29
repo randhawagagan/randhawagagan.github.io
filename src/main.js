@@ -122,3 +122,23 @@ if (yearEl) yearEl.textContent = String(new Date().getFullYear());
       '<p style="font-family:var(--font-mono);font-size:13px;color:var(--muted)">Chat is warming up — reach me at randhawa_gagan@outlook.com in the meantime.</p>';
   }
 })();
+
+/* ---- Hero scroll reactivity (wow-on-scroll) ---- */
+(function heroScroll() {
+  if (REDUCE) return;
+  const hero = document.getElementById("top");
+  if (!hero) return;
+  let ticking = false;
+  function update() {
+    ticking = false;
+    if (!heroApi || !heroApi.setScrollProgress) return;
+    const h = hero.offsetHeight || window.innerHeight;
+    const p = Math.min(1, Math.max(0, window.scrollY / h));
+    heroApi.setScrollProgress(p);
+  }
+  window.addEventListener(
+    "scroll",
+    () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } },
+    { passive: true }
+  );
+})();

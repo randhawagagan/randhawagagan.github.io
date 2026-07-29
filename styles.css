@@ -161,11 +161,16 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; letter-spacing:
     radial-gradient(50% 50% at 25% 70%, color-mix(in srgb, var(--accent-2) 26%, transparent), transparent 70%),
     var(--bg);
 }
-.hero-content { position: relative; z-index: 2; max-width: 42ch; }
+.hero-content { position: relative; z-index: 2; max-width: var(--maxw); }
 /* Hero background is theme-aware (hero.js setTheme), so text follows theme tokens. */
-.hero h1 { font-size: clamp(36px, 6.6vw, 76px); font-weight: 700; margin: 22px 0 0; color: var(--ink); }
+.hero h1 { font-size: clamp(38px, 6.4vw, 96px); font-weight: 700; margin: 22px 0 0; color: var(--ink); letter-spacing: -0.03em; }
 .hero h1 .lit { color: var(--accent); }
-.hero .sub { color: var(--muted); font-size: clamp(16px, 2.1vw, 20px); margin: 24px 0 0; max-width: 52ch; }
+.hero .sub { color: var(--muted); font-size: clamp(16px, 2.15vw, 21px); margin: 26px 0 0; max-width: 52ch; }
+/* Own the width on large screens: text anchored left, 3D breathing to the right. */
+@media (min-width: 900px) {
+  .hero h1 { max-width: 66%; }
+  .hero .sub { max-width: 46ch; }
+}
 .hero-cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; }
 .hero-scroll { position: absolute; bottom: 26px; left: var(--pad); z-index: 2; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--faint); display: flex; align-items: center; gap: 10px; }
 .hero-scroll::after { content: ""; width: 1px; height: 26px; background: linear-gradient(var(--faint), transparent); }
