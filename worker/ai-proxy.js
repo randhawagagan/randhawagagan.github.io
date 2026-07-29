@@ -1,31 +1,59 @@
 /**
- * ai-proxy.js — Cloudflare Worker: "Ask my portfolio" API proxy
- * -------------------------------------------------------------
+ * ai-proxy.js — Cloudflare Worker: "Ask my portfolio" API proxy (hardened)
+ * ------------------------------------------------------------------------
  * Sits between the static portfolio site (GitHub Pages) and the Anthropic
  * Messages API. The site never sees the API key — it only ever talks to this
- * Worker. The Worker:
+ * Worker, and the Worker talks to Anthropic.
  *
- *   1. Accepts `POST { messages: [{ role, content }, ...] }`.
- *   2. Validates the input.
- *   3. Calls the Anthropic Messages API with streaming enabled.
- *   4. Parses Anthropic's SSE stream server-side and forwards ONLY the plain
- *      text deltas back to the browser, so the front-end can append tokens
- *      directly (no client-side SSE parsing required).
+ * This chat is PUBLIC, so the Worker is hardened to be cost-safe. Abuse should
+ * never produce a meaningful bill. Defenses, in order:
  *
- * Secrets / config (set via `wrangler secret put` / `[vars]` — see README):
- *   • ANTHROPIC_API_KEY  (secret, required)  — never hardcode.
- *   • ALLOWED_ORIGIN     (var, optional)     — e.g. "https://gagan.dev".
- *                                              Defaults to "*".
+ *   1. Origin allowlist  — only the portfolio origins (+ localhost) may call.
+ *   2. Per-IP rate limit  — Cloudflare native Rate Limiting binding.
+ *   3. Global daily cap    — a KV counter caps total upstream calls per day.
+ *   4. Input caps          — small max_tokens + message size/count limits.
+ *   5. Cheapest model       — Claude Haiku 4.5.
  *
- * @see README.md for deploy instructions.
+ * Front-end contract (unchanged):
+ *   • Success → HTTP 200, streaming body of raw text tokens (text/plain).
+ *   • Error   → non-2xx JSON { "error": string }.
+ *   • Daily cap hit → HTTP 200 with a friendly streamed text message (see the
+ *     DAILY-CAP UX note below). Chosen so the visitor sees a graceful reply in
+ *     the chat rather than an error bubble, and NO Anthropic call is made.
+ *
+ * Bindings / config (see README.md):
+ *   • ANTHROPIC_API_KEY (secret, required) — never hardcode.
+ *   • RATE_LIMITER      (ratelimit binding) — per-IP limiter.
+ *   • DEMO_KV           (KV namespace)      — global daily counter.
+ *   • MAX_DAILY_REQUESTS (var, optional)    — default 300.
+ *
+ * Bindings 2 and 3 are optional at runtime: if unbound (e.g. first local run),
+ * that specific defense is skipped rather than crashing.
  */
 
-// A valid current Anthropic model id.
-const MODEL = "claude-sonnet-5";
+/* ------------------------------------------------------------------ *
+ * Constants
+ * ------------------------------------------------------------------ */
+
+// Cheapest current model. Confirmed via the claude-api skill: the alias
+// `claude-haiku-4-5` (pinned: claude-haiku-4-5-20251001) uses the same Messages
+// API and the same streaming SSE shape (content_block_delta / text_delta).
+const MODEL = "claude-haiku-4-5";
 const ANTHROPIC_URL = "https://api.anthropic.com/v1/messages";
-const MAX_TOKENS = 512;
-const MAX_MESSAGES = 40; // basic abuse guard on conversation length
-const MAX_CONTENT_CHARS = 8000; // per-message length cap
+
+const MAX_TOKENS = 300; // small cap keeps per-call cost tiny
+const MAX_MESSAGES = 12; // conversation length cap
+const MAX_CONTENT_CHARS = 1500; // per-message length cap
+const DEFAULT_MAX_DAILY = 300; // global upstream calls/day if env var unset
+const KV_TTL_SECONDS = 172800; // 2 days — old daily keys expire on their own
+
+// Origins allowed to use this proxy. Localhost/127.0.0.1 on any port are
+// matched by the regex below (for local testing).
+const ALLOWED_ORIGINS = new Set([
+  "https://gaganrandhawa.me",
+  "https://www.gaganrandhawa.me",
+]);
+const LOCALHOST_RE = /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/;
 
 // System prompt describing Gagan. The model must not invent facts beyond this.
 const SYSTEM_PROMPT = `You are the AI assistant embedded in Gagan Randhawa's personal portfolio website. You answer questions from recruiters, hiring managers, and peers about Gagan.
@@ -45,11 +73,46 @@ Guidelines:
 - Never invent facts, projects, employers, or credentials beyond what is listed above. If asked something you don't know, say so and suggest emailing Gagan.
 - Speak positively but honestly. Do not fabricate metrics or claims.`;
 
+// Shown (streamed) when the global daily cap is hit — see DAILY-CAP UX note.
+const DAILY_CAP_MESSAGE =
+  "The live demo has hit today's limit — but here's the short version: " +
+  "Gagan Randhawa is a Senior Frontend Engineer / Frontend Architect with " +
+  "11+ years of experience (ex-SAP Labs, aerospace at Adda Tech). He works in " +
+  "React, Angular, and TypeScript, and is strongest in performance, design " +
+  "systems, and technical leadership. Reach him at randhawa_gagan@live.com, " +
+  "or come back tomorrow to chat live.";
+
 /* ------------------------------------------------------------------ *
- * CORS helpers
+ * Origin / CORS helpers
  * ------------------------------------------------------------------ */
-function corsHeaders(env) {
-  const origin = (env && env.ALLOWED_ORIGIN) || "*";
+
+/** Extract the origin from the request (Origin header, Referer fallback). */
+function getRequestOrigin(request) {
+  const origin = request.headers.get("Origin");
+  if (origin) return origin;
+  // Fallback: derive origin from Referer (e.g. same-origin navigations).
+  const referer = request.headers.get("Referer");
+  if (referer) {
+    try {
+      return new URL(referer).origin;
+    } catch {
+      /* ignore malformed referer */
+    }
+  }
+  return null;
+}
+
+/** Is this origin allowed to use the proxy? */
+function isAllowedOrigin(origin) {
+  if (!origin) return false;
+  return ALLOWED_ORIGINS.has(origin) || LOCALHOST_RE.test(origin);
+}
+
+/**
+ * CORS headers. We NEVER send `*` now — we echo only the specific allowed
+ * origin. Callers must have already passed isAllowedOrigin().
+ */
+function corsHeaders(origin) {
   return {
     "Access-Control-Allow-Origin": origin,
     "Access-Control-Allow-Methods": "POST, OPTIONS",
@@ -59,16 +122,18 @@ function corsHeaders(env) {
   };
 }
 
-function jsonError(message, status, env) {
+function jsonError(message, status, origin) {
   return new Response(JSON.stringify({ error: message }), {
     status,
-    headers: { "Content-Type": "application/json", ...corsHeaders(env) },
+    headers: {
+      "Content-Type": "application/json",
+      ...(origin ? corsHeaders(origin) : {}),
+    },
   });
 }
 
 /* ------------------------------------------------------------------ *
- * Input validation. Returns { messages } or throws an Error whose
- * message is safe to surface to the client.
+ * Input validation
  * ------------------------------------------------------------------ */
 function validate(body) {
   if (!body || typeof body !== "object") {
@@ -79,7 +144,7 @@ function validate(body) {
     throw new Error("`messages` must be a non-empty array.");
   }
   if (messages.length > MAX_MESSAGES) {
-    throw new Error("Conversation is too long.");
+    throw new Error(`Too many messages (max ${MAX_MESSAGES}).`);
   }
   const clean = [];
   for (const m of messages) {
@@ -89,12 +154,38 @@ function validate(body) {
     if (typeof m.content !== "string" || m.content.length === 0) {
       throw new Error("Each message needs non-empty string content.");
     }
-    clean.push({ role: m.role, content: m.content.slice(0, MAX_CONTENT_CHARS) });
+    if (m.content.length > MAX_CONTENT_CHARS) {
+      throw new Error(`Message too long (max ${MAX_CONTENT_CHARS} chars).`);
+    }
+    clean.push({ role: m.role, content: m.content });
   }
   return clean;
 }
 
 /* ------------------------------------------------------------------ *
+ * Streaming helpers
+ * ------------------------------------------------------------------ */
+
+/** Stream a fixed string back as plain text (used for the daily-cap reply). */
+function textResponse(text, origin) {
+  const encoder = new TextEncoder();
+  const stream = new ReadableStream({
+    start(controller) {
+      controller.enqueue(encoder.encode(text));
+      controller.close();
+    },
+  });
+  return new Response(stream, {
+    status: 200,
+    headers: {
+      "Content-Type": "text/plain; charset=utf-8",
+      "Cache-Control": "no-store",
+      ...corsHeaders(origin),
+    },
+  });
+}
+
+/**
  * Anthropic SSE -> plain text.
  *
  * Anthropic streams Server-Sent Events. The text we care about lives in
@@ -104,9 +195,9 @@ function validate(body) {
  *   data: {"type":"content_block_delta","index":0,
  *          "delta":{"type":"text_delta","text":"Hello"}}
  *
- * We parse those server-side and enqueue just `delta.text`. The browser then
- * receives a stream of raw text tokens with no protocol to decode.
- * ------------------------------------------------------------------ */
+ * We parse those server-side and enqueue just `delta.text`, so the browser
+ * receives raw text tokens with no protocol to decode.
+ */
 function textStreamFromAnthropic(upstreamBody) {
   const decoder = new TextDecoder();
   const encoder = new TextEncoder();
@@ -121,7 +212,6 @@ function textStreamFromAnthropic(upstreamBody) {
           if (done) break;
           buffer += decoder.decode(value, { stream: true });
 
-          // SSE events are separated by a blank line.
           let sep;
           while ((sep = buffer.indexOf("\n\n")) !== -1) {
             const rawEvent = buffer.slice(0, sep);
@@ -129,13 +219,9 @@ function textStreamFromAnthropic(upstreamBody) {
             emit(rawEvent, controller, encoder);
           }
         }
-        // Flush any trailing event.
         if (buffer.trim()) emit(buffer, controller, encoder);
-      } catch (err) {
-        // Surface a short note in-stream so the reader isn't left hanging.
-        controller.enqueue(
-          encoder.encode("\n\n[stream interrupted]")
-        );
+      } catch {
+        controller.enqueue(encoder.encode("\n\n[stream interrupted]"));
       } finally {
         controller.close();
       }
@@ -145,7 +231,6 @@ function textStreamFromAnthropic(upstreamBody) {
 
 /** Parse one SSE event block and enqueue its text delta, if any. */
 function emit(rawEvent, controller, encoder) {
-  // A block may contain multiple `data:` lines; concatenate them.
   let dataStr = "";
   for (const line of rawEvent.split("\n")) {
     const trimmed = line.trimStart();
@@ -159,7 +244,7 @@ function emit(rawEvent, controller, encoder) {
   try {
     parsed = JSON.parse(dataStr);
   } catch {
-    return; // ignore keep-alives / malformed fragments
+    return;
   }
 
   if (
@@ -173,22 +258,83 @@ function emit(rawEvent, controller, encoder) {
 }
 
 /* ------------------------------------------------------------------ *
+ * Cost-safety helpers
+ * ------------------------------------------------------------------ */
+
+/** UTC date key, e.g. "demo:2026-07-29". */
+function dailyKey() {
+  return "demo:" + new Date().toISOString().slice(0, 10);
+}
+
+/**
+ * Check-and-increment the global daily counter in KV.
+ * Returns true if the request is WITHIN budget (and was counted), false if the
+ * cap is already reached. If KV is not bound, always returns true (skip).
+ *
+ * Note: KV has no atomic increment and is eventually consistent, so this is a
+ * soft cap — good enough as a budget backstop, not a hard transactional limit.
+ */
+async function withinDailyBudget(env) {
+  if (!env.DEMO_KV) return true; // binding absent → skip this defense
+  const max = parseInt(env.MAX_DAILY_REQUESTS, 10) || DEFAULT_MAX_DAILY;
+  const key = dailyKey();
+  const current = parseInt((await env.DEMO_KV.get(key)) || "0", 10);
+  if (current >= max) return false;
+  await env.DEMO_KV.put(key, String(current + 1), {
+    expirationTtl: KV_TTL_SECONDS,
+  });
+  return true;
+}
+
+/**
+ * Per-IP rate limit via Cloudflare's native Rate Limiting binding.
+ * Returns true if allowed. If the binding is absent, returns true (skip).
+ */
+async function withinRateLimit(env, request) {
+  if (!env.RATE_LIMITER) return true; // binding absent → skip this defense
+  const ip = request.headers.get("cf-connecting-ip") || "unknown";
+  const { success } = await env.RATE_LIMITER.limit({ key: ip });
+  return success;
+}
+
+/* ------------------------------------------------------------------ *
  * Worker entry point
  * ------------------------------------------------------------------ */
 export default {
   async fetch(request, env) {
+    const origin = getRequestOrigin(request);
+    const allowed = isAllowedOrigin(origin);
+
     // --- CORS preflight ---
     if (request.method === "OPTIONS") {
-      return new Response(null, { status: 204, headers: corsHeaders(env) });
+      if (!allowed) return new Response(null, { status: 403 });
+      return new Response(null, { status: 204, headers: corsHeaders(origin) });
+    }
+
+    // --- Origin allowlist (403 for everyone else) ---
+    if (!allowed) {
+      // No CORS headers on a rejected origin — nothing to echo.
+      return new Response(JSON.stringify({ error: "Forbidden origin." }), {
+        status: 403,
+        headers: { "Content-Type": "application/json" },
+      });
     }
 
     if (request.method !== "POST") {
-      return jsonError("Method not allowed. Use POST.", 405, env);
+      return jsonError("Method not allowed. Use POST.", 405, origin);
     }
 
     if (!env.ANTHROPIC_API_KEY) {
-      // Misconfiguration — do not leak details.
-      return jsonError("Server is not configured.", 500, env);
+      return jsonError("Server is not configured.", 500, origin);
+    }
+
+    // --- Per-IP rate limit ---
+    if (!(await withinRateLimit(env, request))) {
+      return jsonError(
+        "You've reached the demo's rate limit — give it a minute and try again.",
+        429,
+        origin
+      );
     }
 
     // --- Parse & validate input ---
@@ -197,18 +343,22 @@ export default {
       const body = await request.json();
       cleanMessages = validate(body);
     } catch (err) {
-      return jsonError(err.message || "Invalid request.", 400, env);
+      return jsonError(err.message || "Invalid request.", 400, origin);
     }
 
     /*
-     * Rate limiting note:
-     * This proxy is public, so consider adding rate limiting before going to
-     * production. Options: Cloudflare's built-in Rate Limiting Rules (no code),
-     * or a Durable Object / KV counter keyed on `request.headers.get("CF-Connecting-IP")`.
-     * Left out here to keep the Worker dependency-free.
+     * DAILY-CAP UX: when the global budget is exhausted we do NOT call
+     * Anthropic. Instead we return HTTP 200 and stream a friendly canned
+     * message, so the visitor sees a graceful reply inside the chat (the
+     * front-end treats any 200 stream as a normal assistant turn). This is a
+     * nicer experience than a red error bubble, and it guarantees zero spend
+     * once the cap is hit.
      */
+    if (!(await withinDailyBudget(env))) {
+      return textResponse(DAILY_CAP_MESSAGE, origin);
+    }
 
-    // --- Call Anthropic with streaming enabled ---
+    // --- Call Anthropic (Haiku 4.5) with streaming enabled ---
     let upstream;
     try {
       upstream = await fetch(ANTHROPIC_URL, {
@@ -227,14 +377,13 @@ export default {
         }),
       });
     } catch {
-      return jsonError("Failed to reach the model provider.", 502, env);
+      return jsonError("Failed to reach the model provider.", 502, origin);
     }
 
     if (!upstream.ok || !upstream.body) {
-      // Forward a sanitized status; log the detail server-side only.
       const detail = await upstream.text().catch(() => "");
       console.error("Anthropic error", upstream.status, detail);
-      return jsonError("The model provider returned an error.", 502, env);
+      return jsonError("The model provider returned an error.", 502, origin);
     }
 
     // --- Stream plain-text tokens back to the browser ---
@@ -243,7 +392,7 @@ export default {
       headers: {
         "Content-Type": "text/plain; charset=utf-8",
         "Cache-Control": "no-store",
-        ...corsHeaders(env),
+        ...corsHeaders(origin),
       },
     });
   },
