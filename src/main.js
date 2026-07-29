@@ -9,6 +9,10 @@
 // Leave empty ("") to run the on-page chat in scripted-fallback mode.
 const AI_ENDPOINT = "";
 
+// Holds the Three.js hero API once it's initialized, so the theme toggle
+// can recolor the hero live.
+let heroApi = null;
+
 /* ---- Theme toggle (persisted) ---- */
 (function theme() {
   const root = document.documentElement;
@@ -22,6 +26,7 @@ const AI_ENDPOINT = "";
     const next = current === "dark" ? "light" : "dark";
     root.setAttribute("data-theme", next);
     localStorage.setItem("gr-theme", next);
+    if (heroApi && heroApi.setTheme) heroApi.setTheme(next);
   });
 })();
 
@@ -97,7 +102,7 @@ if (yearEl) yearEl.textContent = String(new Date().getFullYear());
   if (!canvas) return;
   try {
     const { initHero } = await import("./hero.js");
-    initHero(canvas, { wrap });
+    heroApi = initHero(canvas, { wrap });
   } catch (err) {
     console.warn("[hero] falling back to static background:", err);
     if (wrap) wrap.classList.add("no-webgl");

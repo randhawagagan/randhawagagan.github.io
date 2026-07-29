@@ -150,8 +150,8 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; letter-spacing:
 #hero-canvas { width: 100%; height: 100%; display: block; }
 .hero-canvas-wrap::after {
   content: ""; position: absolute; inset: 0; pointer-events: none;
-  /* Always dark, independent of theme — the hero is a dark stage in both modes. */
-  background: radial-gradient(120% 90% at 70% 30%, transparent 30%, #08090d 88%);
+  /* Theme-aware fade so the vignette matches the (now theme-aware) hero canvas. */
+  background: radial-gradient(120% 90% at 70% 30%, transparent 30%, var(--bg) 88%);
 }
 /* WebGL fallback gradient (hero sets .hero-webgl-unavailable; glue sets .no-webgl) */
 .hero-canvas-wrap.no-webgl,
@@ -159,15 +159,13 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; letter-spacing:
   background:
     radial-gradient(60% 60% at 72% 32%, color-mix(in srgb, var(--accent) 40%, transparent), transparent 70%),
     radial-gradient(50% 50% at 25% 70%, color-mix(in srgb, var(--accent-2) 26%, transparent), transparent 70%),
-    #08090d;
+    var(--bg);
 }
 .hero-content { position: relative; z-index: 2; max-width: 42ch; }
-/* Hero is a dark stage in both themes, so pin its foreground to light values. */
-.hero .eyebrow { color: #8b97ff; }
-.hero .eyebrow::before { background: #8b97ff; }
-.hero h1 { font-size: clamp(36px, 6.6vw, 76px); font-weight: 700; margin: 22px 0 0; color: #f4f6fb; }
-.hero h1 .lit { color: #6d7cff; }
-.hero .sub { color: #aeb6c6; font-size: clamp(16px, 2.1vw, 20px); margin: 24px 0 0; max-width: 52ch; }
+/* Hero background is theme-aware (hero.js setTheme), so text follows theme tokens. */
+.hero h1 { font-size: clamp(36px, 6.6vw, 76px); font-weight: 700; margin: 22px 0 0; color: var(--ink); }
+.hero h1 .lit { color: var(--accent); }
+.hero .sub { color: var(--muted); font-size: clamp(16px, 2.1vw, 20px); margin: 24px 0 0; max-width: 52ch; }
 .hero-cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; }
 .hero-scroll { position: absolute; bottom: 26px; left: var(--pad); z-index: 2; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--faint); display: flex; align-items: center; gap: 10px; }
 .hero-scroll::after { content: ""; width: 1px; height: 26px; background: linear-gradient(var(--faint), transparent); }
