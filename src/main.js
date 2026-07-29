@@ -25,19 +25,58 @@ const AI_ENDPOINT = "";
   });
 })();
 
-/* ---- Reveal on scroll ---- */
+/* ---- Count-up for metric numbers ---- */
+const REDUCE = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+function countUp(el) {
+  const target = parseFloat(el.getAttribute("data-count"));
+  const suffix = el.getAttribute("data-suffix") || "";
+  if (Number.isNaN(target)) return;
+  if (REDUCE) { el.textContent = target + suffix; return; }
+  const duration = 1100;
+  const start = performance.now();
+  function tick(now) {
+    const t = Math.min(1, (now - start) / duration);
+    const eased = 1 - Math.pow(1 - t, 3); // easeOutCubic
+    el.textContent = Math.round(target * eased) + suffix;
+    if (t < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+/* ---- Reveal on scroll (with stagger) + count-up trigger ---- */
 (function reveal() {
-  const els = document.querySelectorAll(".reveal");
-  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (reduce || !("IntersectionObserver" in window)) {
-    els.forEach((el) => el.classList.add("in"));
+  const els = Array.from(document.querySelectorAll(".reveal"));
+
+  // Stagger siblings: delay each reveal by its index among reveal-siblings.
+  if (!REDUCE) {
+    const byParent = new Map();
+    els.forEach((el) => {
+      const p = el.parentElement;
+      const group = byParent.get(p) || [];
+      group.push(el);
+      byParent.set(p, group);
+    });
+    byParent.forEach((group) => {
+      if (group.length < 2) return;
+      group.forEach((el, i) => { el.style.transitionDelay = Math.min(i * 0.09, 0.45) + "s"; });
+    });
+  }
+
+  const fire = (el) => {
+    el.classList.add("in");
+    el.querySelectorAll("[data-count]").forEach(countUp);
+  };
+
+  if (REDUCE || !("IntersectionObserver" in window)) {
+    els.forEach(fire);
     return;
   }
   const io = new IntersectionObserver(
     (entries) => {
       entries.forEach((en) => {
         if (en.isIntersecting) {
-          en.target.classList.add("in");
+          fire(en.target);
           io.unobserve(en.target);
         }
       });
