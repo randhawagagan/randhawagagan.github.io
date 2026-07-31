@@ -1,0 +1,24 @@
+name = "ask-my-portfolio"
+main = "ai-proxy.js"
+compatibility_date = "2024-11-01"
+
+# --- Tunable vars ---
+[vars]
+# Global cap on upstream Anthropic calls per UTC day (code default: 300).
+MAX_DAILY_REQUESTS = "300"
+
+# --- Per-IP rate limiter (Cloudflare native Rate Limiting binding) ---
+# simple.limit requests per simple.period seconds (period must be 10 or 60).
+# Default: 5 requests / 60s per IP. Read in the Worker as env.RATE_LIMITER.
+[[unsafe.bindings]]
+name = "RATE_LIMITER"
+type = "ratelimit"
+namespace_id = "1001"            # any unique integer id for this limiter
+simple = { limit = 5, period = 60 }
+
+# --- KV namespace for the global daily counter ---
+# Run:  wrangler kv namespace create DEMO_KV
+# then paste the printed id below (replacing PASTE_KV_ID_HERE).
+[[kv_namespaces]]
+binding = "DEMO_KV"
+id = "72d5490ca188436a9d073dbbe5e045bf"

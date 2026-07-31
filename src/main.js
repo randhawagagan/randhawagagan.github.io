@@ -7,7 +7,7 @@
 
 // Set this to your deployed Cloudflare Worker URL to enable live AI.
 // Leave empty ("") to run the on-page chat in scripted-fallback mode.
-const AI_ENDPOINT = "";
+const AI_ENDPOINT = "https://ask-my-portfolio.gagzy-randhawa.workers.dev";
 
 // Holds the Three.js hero API once it's initialized, so the theme toggle
 // can recolor the hero live.
