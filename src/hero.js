@@ -16,6 +16,10 @@
  */
 
 import * as THREE from 'https://esm.sh/three@0.160.0';
+import { EffectComposer } from 'https://esm.sh/three@0.160.0/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from 'https://esm.sh/three@0.160.0/examples/jsm/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'https://esm.sh/three@0.160.0/examples/jsm/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'https://esm.sh/three@0.160.0/examples/jsm/postprocessing/OutputPass.js';
 
 /* -------------------------------------------------------------------------- */
 /* Palette & tunables                                                         */
@@ -38,19 +42,29 @@ const PALETTES = {
     pointOpacity: 1.0,
     pointSize: 26.0,
     lineOpacity: 0.16,
+    bloomStrength: 0.72, // real glow: the indigo/cyan points shimmer
+    hoverDarken: 0.0, // dark theme: hover BRIGHTENS points (additive glow)
   },
   light: {
     background: 0xecedf2, // soft light page background + fog
-    primary: 0x4550e0, // deeper indigo so it reads on a light field
-    secondary: 0x0f9aa2, // teal
-    spark: 0xb9711a, // burnt amber
+    // Deep, saturated colours so the structure reads clearly on the light page
+    // (bloom is ~off in light, so contrast — not glow — has to carry it).
+    primary: 0x2a2f8f, // deep indigo — wireframe lines + bulk points
+    secondary: 0x0c7a80, // deep teal
+    spark: 0x9a5e14, // deep amber
     blending: THREE.NormalBlending, // additive would just wash toward white
     pointColorScale: 1.0, // keep full saturation on the light field
-    pointOpacity: 0.95,
+    pointOpacity: 1.0, // fully opaque dots read best on light
     pointSize: 30.0, // slightly larger so the structure reads clearly
-    lineOpacity: 0.3,
+    lineOpacity: 0.5, // stronger lines for a clearly visible skeleton
+    bloomStrength: 0.08, // near-off: bloom washes out an already-light page
+    hoverDarken: 1.0, // light theme: hover DEEPENS points (brightening vanishes)
   },
 };
+
+// Bloom radius/threshold are shared across themes (only strength flips live).
+const BLOOM_RADIUS = 0.5;
+const BLOOM_THRESHOLD = 0.2;
 
 const CONFIG = {
   pointCount: 4200, // total GPU points on the structure
@@ -204,12 +218,25 @@ export function initHero(canvas, opts = {}) {
   // Clear colour, fog and material colours are all set by applyPalette() below;
   // seed them with the initial palette here to avoid a first-frame flash.
   renderer.setClearColor(PALETTES[initialTheme].background, 1);
+  // Colour management: the whole post-processing chain works in LINEAR space and
+  // OutputPass owns the final linear→sRGB conversion (the tone-mapping stage).
+  // Tone mapping itself is left OFF so the exact palette + page-matching
+  // background colours (#08090d / #ecedf2) survive the round-trip unshifted;
+  // bloom blow-out is controlled by threshold instead. outputColorSpace stays
+  // the r160 default (sRGB), which OutputPass targets.
+  renderer.toneMapping = THREE.NoToneMapping;
 
   /* ------------------------------------------------------------------------ */
   /* Scene, camera, fog                                                       */
   /* ------------------------------------------------------------------------ */
 
   const scene = new THREE.Scene();
+  // IMPORTANT: drive the background via scene.background, NOT renderer clear.
+  // Through the EffectComposer + OutputPass chain a renderer clear colour gets
+  // sRGB-encoded twice (lifting near-black #08090d to a slate grey), whereas a
+  // colour-managed scene.background survives the pipeline exactly. Verified:
+  // scene.background → [8,9,13], setClearColor → [50,53,64].
+  scene.background = new THREE.Color(PALETTES[initialTheme].background);
   scene.fog = new THREE.Fog(
     PALETTES[initialTheme].background,
     config.fogNear,
@@ -315,6 +342,8 @@ export function initHero(canvas, opts = {}) {
       uPointer: { value: new THREE.Vector2(0, 0) }, // damped cursor, NDC space
       uPointerStrength: { value: 0 }, // 0 idle → 1 while pointer active
       uAspect: { value: 1 }, // viewport aspect for a round hover spotlight
+      uFlow: { value: 0.55 }, // amplitude of the slow flowing turbulence
+      uHoverDarken: { value: 0 }, // 0 = hover brightens (dark), 1 = deepens (light)
     },
     vertexColors: true,
     transparent: true,
@@ -329,6 +358,7 @@ export function initHero(canvas, opts = {}) {
       uniform vec2 uPointer;
       uniform float uPointerStrength;
       uniform float uAspect;
+      uniform float uFlow;
 
       attribute float aSize;
       attribute float aPhase;
@@ -350,6 +380,17 @@ export function initHero(canvas, opts = {}) {
         // alive feel; per-point phase keeps it from pulsing in unison.
         float breathe = sin(uTime * 0.6 + aPhase) * 0.6;
         pos += normalize(position + 0.001) * breathe;
+
+        // Slow flowing turbulence: a divergence-free-ish curl of sines that
+        // makes the field drift like it's alive, without drifting far enough to
+        // hurt readability. Faded out while dispersed so intro/scroll stay clean.
+        float assembled = uIntro * (1.0 - uScroll);
+        vec3 flow = vec3(
+          sin(pos.y * 0.16 + uTime * 0.25),
+          sin(pos.z * 0.16 + uTime * 0.22 + 1.7),
+          sin(pos.x * 0.16 + uTime * 0.28 + 3.1)
+        );
+        pos += flow * uFlow * assembled;
 
         vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
         vFogDepth = -mvPosition.z;
@@ -377,9 +418,10 @@ export function initHero(canvas, opts = {}) {
       uniform vec3 uFogColor;
       uniform float uFogNear;
       uniform float uFogFar;
-      uniform float uColorScale; // tames additive glow (dark) / full sat (light)
-      uniform float uOpacity;    // per-theme opacity multiplier
-      uniform float uScrollFade; // global dissolve as the hero scrolls away
+      uniform float uColorScale;  // tames additive glow (dark) / full sat (light)
+      uniform float uOpacity;     // per-theme opacity multiplier
+      uniform float uScrollFade;  // global dissolve as the hero scrolls away
+      uniform float uHoverDarken; // 0 = hover brightens (dark), 1 = deepens (light)
 
       varying vec3 vColor;
       varying float vFogDepth;
@@ -395,15 +437,23 @@ export function initHero(canvas, opts = {}) {
         float alpha = smoothstep(0.5, 0.0, d);
         alpha = pow(alpha, 1.6);
 
-        // Scale colour (in dark mode this keeps additive glow off pure white),
-        // then lift points near the cursor for a delightful hover response.
-        vec3 color = vColor * uColorScale * (1.0 + vGlow * 0.7);
+        vec3 base = vColor * uColorScale;
+
+        // Hover response is theme-aware:
+        //  • dark  (uHoverDarken 0): brighten toward glow — reads on a dark bg.
+        //  • light (uHoverDarken 1): deepen toward a richer, darker shade —
+        //    brightening would vanish into the light page, so we go the other way.
+        vec3 hoverBright = base * (1.0 + vGlow * 0.7);
+        vec3 hoverDeep = mix(base, base * 0.3, vGlow); // pull toward much darker
+        vec3 color = mix(hoverBright, hoverDeep, uHoverDarken);
 
         // Depth fog: fade distant points toward the background so they recede
         // with distance instead of piling up (works for both palettes).
         float fogFactor = smoothstep(uFogNear, uFogFar, vFogDepth);
         color = mix(color, uFogColor, fogFactor);
 
+        // Both themes gain opacity on hover — a darker dot reads stronger on
+        // light, a glowier dot reads stronger on dark.
         gl_FragColor = vec4(color, alpha * uOpacity * uScrollFade * (1.0 + vGlow * 0.4));
       }
     `,
@@ -438,6 +488,26 @@ export function initHero(canvas, opts = {}) {
   });
   const wireframe = new THREE.LineSegments(wireframeGeometry, wireframeMaterial);
   structure.add(wireframe);
+
+  /* ------------------------------------------------------------------------ */
+  /* Post-processing: EffectComposer + UnrealBloom for a premium glow         */
+  /* ------------------------------------------------------------------------ */
+
+  // Pipeline: RenderPass (linear HDR) → UnrealBloom (linear) → OutputPass
+  // (tone-map stage + linear→sRGB). Every render in this module goes through
+  // composer.render() so the glow is applied uniformly.
+  const composer = new EffectComposer(renderer);
+  const renderPass = new RenderPass(scene, camera);
+  const bloomPass = new UnrealBloomPass(
+    new THREE.Vector2(1, 1), // resolution — corrected immediately by resize()
+    PALETTES[initialTheme].bloomStrength,
+    BLOOM_RADIUS,
+    BLOOM_THRESHOLD
+  );
+  const outputPass = new OutputPass();
+  composer.addPass(renderPass);
+  composer.addPass(bloomPass);
+  composer.addPass(outputPass);
 
   /* ------------------------------------------------------------------------ */
   /* Theme application                                                        */
@@ -479,7 +549,9 @@ export function initHero(canvas, opts = {}) {
     }
     colorAttr.needsUpdate = true;
 
-    // Background + fog.
+    // Background + fog. scene.background is the authoritative clear (see the
+    // note at scene creation); keep the renderer clear in sync as a fallback.
+    scene.background.set(p.background);
     renderer.setClearColor(p.background, 1);
     scene.fog.color.set(p.background);
 
@@ -488,6 +560,7 @@ export function initHero(canvas, opts = {}) {
     pointMaterial.uniforms.uColorScale.value = p.pointColorScale;
     pointMaterial.uniforms.uOpacity.value = p.pointOpacity;
     pointMaterial.uniforms.uSize.value = p.pointSize;
+    pointMaterial.uniforms.uHoverDarken.value = p.hoverDarken;
     pointMaterial.blending = p.blending;
     pointMaterial.needsUpdate = true;
 
@@ -496,6 +569,10 @@ export function initHero(canvas, opts = {}) {
     wireframeMaterial.blending = p.blending;
     wireframeMaterial.needsUpdate = true;
     updateWireframeOpacity();
+
+    // Bloom strength flips live with the theme: a real glow in dark mode, all
+    // but off in light mode (where it would just wash the light page out).
+    bloomPass.strength = p.bloomStrength;
   }
 
   /**
@@ -533,10 +610,44 @@ export function initHero(canvas, opts = {}) {
     const w = Math.max(1, canvas.clientWidth);
     const h = Math.max(1, canvas.clientHeight);
     renderer.setSize(w, h, false); // false: don't touch the canvas CSS size
+    // Keep the composer's render targets in lock-step with the renderer (size
+    // AND pixel ratio) so bloom samples at the capped-DPR resolution.
+    composer.setPixelRatio(renderer.getPixelRatio());
+    composer.setSize(w, h);
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
     pointMaterial.uniforms.uPixelRatio.value = renderer.getPixelRatio();
     pointMaterial.uniforms.uAspect.value = w / h;
+
+    // Responsive horizontal placement: on wide screens the headline occupies
+    // the left ~58%, so slide the knot to the RIGHT so both read clearly. On
+    // narrow screens the text is full-width, so keep the knot centred (the
+    // dimmed field behind the text is fine there).
+    structure.position.x = computeKnotOffsetX(w, h);
+  }
+
+  /**
+   * World-space X offset that lands the knot's centre at the desired fraction
+   * of the viewport width. `frac` is the shift as a fraction of the FULL
+   * viewport width (0 = centred at 50%, 0.20 = centred at 70%).
+   *   • wide  (≥1000px): 0.20  → knot centre ≈ 70%
+   *   • mid   (700–1000): ramps 0 → 0.20 (≈50% → 70%) so it eases in
+   *   • narrow (<700px):  0     → stays centred
+   * @returns {number} world units to translate the structure group along +X
+   */
+  function computeKnotOffsetX(w, h) {
+    let frac;
+    if (w >= 1000) frac = 0.2;
+    else if (w > 700) frac = 0.2 * ((w - 700) / 300); // ease-in across mid range
+    else frac = 0;
+    if (frac === 0) return 0;
+
+    // Half the visible world width at the knot's depth (camera rest distance).
+    const fovY = THREE.MathUtils.degToRad(camera.fov);
+    const worldHalfHeight = Math.tan(fovY / 2) * config.cameraZ;
+    const worldHalfWidth = worldHalfHeight * (w / h);
+    // frac is of the FULL width (2 × half-width).
+    return frac * 2 * worldHalfWidth;
   }
 
   const resizeObserver = new ResizeObserver(() => resize());
@@ -643,7 +754,7 @@ export function initHero(canvas, opts = {}) {
     pointMaterial.uniforms.uPointer.value.copy(pointerCurrent);
     pointMaterial.uniforms.uTime.value = elapsed;
 
-    renderer.render(scene, camera);
+    composer.render();
   }
 
   function tick() {
@@ -672,7 +783,7 @@ export function initHero(canvas, opts = {}) {
    * running in reduced-motion (single static frame) mode.
    */
   function renderOnce() {
-    renderer.render(scene, camera);
+    composer.render();
   }
 
   /* ------------------------------------------------------------------------ */
@@ -686,7 +797,7 @@ export function initHero(canvas, opts = {}) {
     pointMaterial.uniforms.uTime.value = 1.5;
     camera.position.set(3, 2, config.cameraZ);
     camera.lookAt(scene.position);
-    renderer.render(scene, camera);
+    composer.render();
   }
 
   /* ------------------------------------------------------------------------ */
@@ -772,6 +883,13 @@ export function initHero(canvas, opts = {}) {
     canvas.removeEventListener('pointerleave', onPointerLeave);
     canvas.removeEventListener('webglcontextlost', onContextLost);
     canvas.removeEventListener('webglcontextrestored', onContextRestored);
+
+    // Post-processing: dispose the composer's render targets and every pass
+    // that owns GPU resources (guarded — not all passes expose dispose()).
+    composer.dispose();
+    if (typeof bloomPass.dispose === 'function') bloomPass.dispose();
+    if (typeof renderPass.dispose === 'function') renderPass.dispose();
+    if (typeof outputPass.dispose === 'function') outputPass.dispose();
 
     // GPU resources.
     pointGeometry.dispose();
