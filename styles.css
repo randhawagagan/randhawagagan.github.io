@@ -408,13 +408,14 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; letter-spacing:
 .about-body p { color: var(--muted); font-size: 16.5px; margin: 0 0 18px; max-width: 60ch; }
 .about-body strong { color: var(--ink); font-weight: 500; }
 .timeline { display: flex; flex-direction: column; gap: 0; }
-.tl-item { display: grid; grid-template-columns: auto 1fr; gap: 18px; padding: 18px 18px 18px 22px; border-left: 1px solid var(--border); position:relative; transition:background .25s,border-color .25s; }
+.tl-item { display: grid; grid-template-columns: 66px minmax(0, 1fr); gap: 14px; padding: 15px 14px 15px 22px; border-left: 1px solid var(--border); position:relative; transition:background .25s,border-color .25s; }
 .tl-item::before{content:"";position:absolute;left:-4px;top:24px;width:7px;height:7px;border-radius:50%;background:var(--surface);border:1px solid var(--faint)}
 .tl-item:first-child::before{background:var(--accent);border-color:var(--accent);box-shadow:0 0 14px color-mix(in srgb,var(--accent) 70%,transparent)}
 .tl-item:hover{background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 7%,transparent),transparent);border-left-color:var(--accent)}
 .tl-year { font-family: var(--font-mono); font-size: 12px; color: var(--accent); white-space: nowrap; padding-top: 2px; }
 .tl-role { font-weight: 500; font-size: 15px; }
 .tl-org { color: var(--muted); font-size: 13.5px; font-family: var(--font-mono); }
+@media(max-width:520px){.tl-item{grid-template-columns:58px minmax(0,1fr);gap:10px;padding:14px 8px 14px 18px}.tl-role{font-size:14px}.tl-org{font-size:12px}}
 
 /* =========================================================================
    CONTACT / FOOTER
