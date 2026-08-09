@@ -209,8 +209,10 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; letter-spacing:
 .hero::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 20%; z-index: 1; pointer-events: none; background: linear-gradient(to bottom, transparent, var(--bg)); }
 @media (max-width: 700px) {
   .hero { min-height: min(860px, calc(100svh - 64px)); align-items: flex-start; padding-top: clamp(72px, 13vh, 120px); }
-  .hero-canvas-wrap { opacity: .48; transform: translateX(16%); }
-  .hero-canvas-wrap::after { background: linear-gradient(90deg, var(--bg) 4%, color-mix(in srgb, var(--bg) 78%, transparent) 56%, transparent 100%), radial-gradient(120% 90% at 70% 30%, transparent 25%, var(--bg) 90%); }
+  /* hero.js already centres the sculpture below 700px; keep the full canvas in
+     frame and use the vignette—not a second translation—to protect text. */
+  .hero-canvas-wrap { opacity: .78; transform: none; }
+  .hero-canvas-wrap::after { background: linear-gradient(90deg, color-mix(in srgb, var(--bg) 92%, transparent) 0%, color-mix(in srgb, var(--bg) 58%, transparent) 54%, transparent 100%), radial-gradient(110% 82% at 58% 38%, transparent 30%, var(--bg) 94%); }
   .hero h1 { font-size: clamp(42px, 13vw, 66px); }
   .hero .sub { max-width: 38ch; }
   .hero-scroll { display: none; }
