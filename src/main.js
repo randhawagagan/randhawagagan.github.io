@@ -9,7 +9,7 @@
 // Leave empty ("") to run the on-page chat in scripted-fallback mode.
 const AI_ENDPOINT = "https://ask-my-portfolio.gagzy-randhawa.workers.dev";
 
-import { initLang, applyLang, translations } from "./i18n.js";
+import { initLang, applyLang, translations } from "./i18n.js?v=resume3";
 
 // Holds the Three.js hero API once it's initialized, so the theme toggle
 // can recolor the hero live.

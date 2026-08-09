@@ -165,8 +165,8 @@ export const translations = {
     "contact.resumeKicker": "Résumé",
     "contact.resumeTitle": "The traditional version, ready when you are.",
     "contact.resumeLead": "Choose PDF for a polished read, or Word when your hiring system prefers it.",
-    "contact.resumePdf": "Download PDF",
-    "contact.resumeDocx": "Download Word",
+    "contact.resumePdf": "PDF résumé",
+    "contact.resumeDocx": "Word résumé",
     "contact.orConnect": "Or connect directly",
 
     /* ---- Footer ---- */
@@ -327,8 +327,8 @@ export const translations = {
     "contact.resumeKicker": "CV en anglais",
     "contact.resumeTitle": "La version classique, prête à télécharger.",
     "contact.resumeLead": "Choisissez le PDF pour la lecture, ou Word si votre système de recrutement le préfère.",
-    "contact.resumePdf": "Télécharger le PDF",
-    "contact.resumeDocx": "Télécharger Word",
+    "contact.resumePdf": "CV en PDF",
+    "contact.resumeDocx": "CV en format Word",
     "contact.orConnect": "Ou communiquer directement",
 
     /* ---- Footer ---- */
