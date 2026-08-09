@@ -55,7 +55,7 @@ const FALLBACK_ANSWERS_EN = [
   {
     keywords: ["aerospace", "adda", "c#", "csharp"],
     text:
-      "At Adda Tech, where he is a Squad Lead, he works on aerospace software, pairing a React/" +
+      "At Adda Tech, where he is a Team Lead, he works on aerospace software, pairing a React/" +
       "TypeScript frontend with a C# backend. Aerospace means high " +
       "correctness bars and dense, data-heavy interfaces — good training for " +
       "building UIs that stay clear and reliable under real complexity.",
@@ -88,7 +88,7 @@ const FALLBACK_ANSWERS_EN = [
   {
     keywords: ["experience", "years", "background", "who", "about"],
     text:
-      "Gagan Randhawa is a Squad Lead and Frontend Architect with " +
+      "Gagan Randhawa is a Team Lead and Frontend Architect with " +
       "12+ years of experience. He's ex-SAP Labs, has shipped aerospace " +
       "software at Adda Tech, works primarily in React, Angular, and " +
       "TypeScript, and is now building AI-powered products. His strengths are " +

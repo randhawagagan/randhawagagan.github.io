@@ -31,6 +31,7 @@ export const translations = {
     "nav.approach": "Approach",
     "nav.askAi": "Ask my AI",
     "nav.about": "About",
+    "nav.resume": "Résumé",
     "nav.contact": "Contact",
 
     /* ---- Hero ---- */
@@ -60,7 +61,7 @@ export const translations = {
     /* Case 1 — ClinicMaster */
     "case1.index": "01 — 2022–present · Adda Tech, Montréal",
     "case1.title": "ClinicMaster — Healthcare SaaS",
-    "case1.role": "Squad Lead · Frontend Architecture",
+    "case1.role": "Team Lead · Frontend Architecture",
     "case1.desc":
       "Adda Tech's flagship: a cloud platform running scheduling, charting, billing, and analytics for multi-location clinic networks (physio, mental health, sleep, aesthetics). I built the front-end architecture — a reusable component library, Redux + TypeScript state, and per-franchise PWA theming — for a SOC&nbsp;2 / HIPAA / Québec&nbsp;Law&nbsp;25-compliant product on Azure.",
     "case1.m1": "feature delivery time with a 40+ component design-system library",
@@ -70,7 +71,7 @@ export const translations = {
     /* Case 2 — Aerospace */
     "case2.index": "02 — 2022–present · Adda Tech, Montréal",
     "case2.title": "Aerospace Parts Platform",
-    "case2.role": "Squad Lead · Frontend Architecture",
+    "case2.role": "Team Lead · Frontend Architecture",
     "case2.desc":
       "Front-end architecture for an aerospace application managing airplane parts — Angular &amp; React dashboards. Refactored the render-critical path with profiling and lazy loading for a materially faster, calmer UI, and shipped it through Dockerized CI/CD on AWS.",
     "case2.m1": "p75 LCP via code-splitting, lazy loading &amp; profiling",
@@ -136,14 +137,14 @@ export const translations = {
     "about.eyebrow": "About",
     "about.title": "Twelve years deep. Still curious.",
     "about.p1":
-      "I started in 2014 and have spent my career close to the code — <strong>enterprise applications at scale, Angular and React, design systems, micro-frontends, performance work, and leading engineers</strong> at SAP Labs and, today, as a Squad Lead at Adda Tech in Laval.",
+      "I started in 2014 and have spent my career close to the code — <strong>enterprise applications at scale, Angular and React, design systems, micro-frontends, performance work, and leading engineers</strong> at SAP Labs and, today, as a Team Lead at Adda Tech in Laval.",
     "about.p2":
       "What I actually enjoy is <strong>solving hard technical problems and shipping polished products</strong> — not climbing an org chart. So I'm deepening frontend architecture and folding practical AI into how I build, aiming squarely at product engineering.",
     "about.p3":
       "Right now that means turning a decade of frontend depth into <strong>AI-powered products</strong>, built end-to-end with the same discipline I bring to enterprise work.",
 
     /* Timeline roles */
-    "tl1.role": "Squad Lead (Team Lead)",
+    "tl1.role": "Team Lead",
     "tl2.role": "Front-End Lead / Senior Dev (T3)",
     "tl3.role": "Associate Programming Analyst",
     "tl4.role": "B.E. Computer Science",
@@ -161,6 +162,8 @@ export const translations = {
     "contact.replyValue": "Within 1–2 days",
     "contact.copy": "Copy email",
     "contact.copied": "Email copied",
+    "contact.resumePdf": "Download résumé (PDF)",
+    "contact.resumeDocx": "ATS résumé (Word)",
 
     /* ---- Footer ---- */
     "foot.built": "Built with Three.js + a hand-written AI proxy · no template",
@@ -184,6 +187,7 @@ export const translations = {
     "nav.approach": "Approche",
     "nav.askAi": "Mon IA portfolio",
     "nav.about": "À propos",
+    "nav.resume": "CV (anglais)",
     "nav.contact": "Contact",
 
     /* ---- Hero ---- */
@@ -298,7 +302,7 @@ export const translations = {
       "En ce moment, ça veut dire transformer une décennie d'expertise frontend en <strong>produits propulsés par l'IA</strong>, construits de bout en bout avec la même rigueur que j'apporte au travail d'entreprise.",
 
     /* Timeline roles */
-    "tl1.role": "Chef d'équipe (Squad Lead)",
+    "tl1.role": "Chef d'équipe",
     "tl2.role": "Responsable front-end / Dév. senior (T3)",
     "tl3.role": "Analyste-programmeur associé",
     "tl4.role": "B.E. en informatique",
@@ -316,6 +320,8 @@ export const translations = {
     "contact.replyValue": "Sous 1 à 2 jours",
     "contact.copy": "Copier le courriel",
     "contact.copied": "Courriel copié",
+    "contact.resumePdf": "Télécharger le CV (PDF anglais)",
+    "contact.resumeDocx": "CV ATS (Word anglais)",
 
     /* ---- Footer ---- */
     "foot.built": "Construit avec Three.js + un proxy IA écrit à la main · sans gabarit",
