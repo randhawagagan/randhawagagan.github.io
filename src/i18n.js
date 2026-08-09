@@ -162,8 +162,12 @@ export const translations = {
     "contact.replyValue": "Within 1–2 days",
     "contact.copy": "Copy email",
     "contact.copied": "Email copied",
-    "contact.resumePdf": "Download résumé (PDF)",
-    "contact.resumeDocx": "ATS résumé (Word)",
+    "contact.resumeKicker": "Résumé",
+    "contact.resumeTitle": "The traditional version, ready when you are.",
+    "contact.resumeLead": "Choose PDF for a polished read, or Word when your hiring system prefers it.",
+    "contact.resumePdf": "Download PDF",
+    "contact.resumeDocx": "Download Word",
+    "contact.orConnect": "Or connect directly",
 
     /* ---- Footer ---- */
     "foot.built": "Built with Three.js + a hand-written AI proxy · no template",
@@ -320,8 +324,12 @@ export const translations = {
     "contact.replyValue": "Sous 1 à 2 jours",
     "contact.copy": "Copier le courriel",
     "contact.copied": "Courriel copié",
-    "contact.resumePdf": "Télécharger le CV (PDF anglais)",
-    "contact.resumeDocx": "CV ATS (Word anglais)",
+    "contact.resumeKicker": "CV en anglais",
+    "contact.resumeTitle": "La version classique, prête à télécharger.",
+    "contact.resumeLead": "Choisissez le PDF pour la lecture, ou Word si votre système de recrutement le préfère.",
+    "contact.resumePdf": "Télécharger le PDF",
+    "contact.resumeDocx": "Télécharger Word",
+    "contact.orConnect": "Ou communiquer directement",
 
     /* ---- Footer ---- */
     "foot.built": "Construit avec Three.js + un proxy IA écrit à la main · sans gabarit",
