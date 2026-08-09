@@ -72,7 +72,7 @@ const CONFIG = {
   cameraZ: 46, // resting camera distance
   parallaxStrength: 6, // how far the camera drifts with the pointer
   parallaxDamping: 0.045, // lerp factor toward the pointer target (lower = smoother)
-  autoRotate: 0.045, // idle rotation speed (radians/sec-ish)
+  autoRotate: 0.018, // very slow gallery-like idle rotation
   fogNear: 32,
   fogFar: 92,
 };
@@ -130,6 +130,61 @@ function torusKnotPoint(t, p, q, radius, tube, out) {
   out.x += tube * cu;
   out.y += tube * su;
   return out;
+}
+
+/** Build a compact, single-stroke initial with the same dusty wire aesthetic. */
+function makeInitial(points, palette) {
+  const curve = new THREE.CatmullRomCurve3(
+    points.map(([x, y, z]) => new THREE.Vector3(x, y, z)),
+    false,
+    'centripetal',
+    0.5
+  );
+  const tube = new THREE.TubeGeometry(curve, 64, 0.82, 6, false);
+  const wireGeometry = new THREE.WireframeGeometry(tube);
+  tube.dispose();
+  const wireMaterial = new THREE.LineBasicMaterial({
+    color: palette.primary,
+    transparent: true,
+    opacity: palette.lineOpacity * 1.35,
+    blending: palette.blending,
+    depthWrite: false,
+    fog: true,
+  });
+  const wire = new THREE.LineSegments(wireGeometry, wireMaterial);
+
+  const count = 720;
+  const dustPositions = new Float32Array(count * 3);
+  const frames = curve.computeFrenetFrames(180, false);
+  const center = new THREE.Vector3();
+  for (let i = 0; i < count; i++) {
+    const frameIndex = Math.floor(Math.random() * 181);
+    curve.getPointAt(frameIndex / 180, center);
+    const angle = Math.random() * Math.PI * 2;
+    const radius = 0.25 + Math.random() * 0.55;
+    const normal = frames.normals[frameIndex];
+    const binormal = frames.binormals[frameIndex];
+    dustPositions[i * 3] = center.x + normal.x * Math.cos(angle) * radius + binormal.x * Math.sin(angle) * radius;
+    dustPositions[i * 3 + 1] = center.y + normal.y * Math.cos(angle) * radius + binormal.y * Math.sin(angle) * radius;
+    dustPositions[i * 3 + 2] = center.z + normal.z * Math.cos(angle) * radius + binormal.z * Math.sin(angle) * radius;
+  }
+  const dustGeometry = new THREE.BufferGeometry();
+  dustGeometry.setAttribute('position', new THREE.BufferAttribute(dustPositions, 3));
+  const dustMaterial = new THREE.PointsMaterial({
+    // Match the knot's dominant indigo. Cyan is reserved for occasional sparks
+    // in the main shader; using it for every letter point made them look neon.
+    color: palette.primary,
+    size: 0.09,
+    transparent: true,
+    opacity: 0.48,
+    blending: palette.blending,
+    depthWrite: false,
+    fog: true,
+  });
+  const dust = new THREE.Points(dustGeometry, dustMaterial);
+  const group = new THREE.Group();
+  group.add(wire, dust);
+  return { group, wireGeometry, wireMaterial, dustGeometry, dustMaterial };
 }
 
 /* -------------------------------------------------------------------------- */
@@ -460,7 +515,9 @@ export function initHero(canvas, opts = {}) {
   });
 
   const points = new THREE.Points(pointGeometry, pointMaterial);
-  structure.add(points);
+  const knotObject = new THREE.Group();
+  knotObject.add(points);
+  structure.add(knotObject);
 
   /* ------------------------------------------------------------------------ */
   /* Wireframe skeleton: a thin torus-knot line for "engineered" structure    */
@@ -487,7 +544,34 @@ export function initHero(canvas, opts = {}) {
     fog: true,
   });
   const wireframe = new THREE.LineSegments(wireframeGeometry, wireframeMaterial);
-  structure.add(wireframe);
+  knotObject.add(wireframe);
+
+  /* ------------------------------------------------------------------------ */
+  /* Initial satellites: separate G and R sculptures                          */
+  /* ------------------------------------------------------------------------ */
+
+  const gInitial = makeInitial([
+    [4.0, 4.2, -0.4], [1.2, 6.0, 0.5], [-2.4, 5.5, 1.0],
+    [-4.8, 2.7, 0.3], [-5.0, -1.4, -0.8], [-2.8, -4.6, -1.1],
+    [1.0, -5.2, -0.2], [4.3, -3.1, 0.9], [4.5, 0.0, 0.5],
+    [1.8, 0.1, -0.5], [-0.2, 0.1, -0.8],
+  ], PALETTES[initialTheme]);
+  const rInitial = makeInitial([
+    [-3.5, -5.5, 0.4], [-3.5, 0.0, 0.9], [-3.5, 5.5, -0.3],
+    [0.5, 5.5, -1.0], [3.8, 3.8, -0.8], [3.5, 1.0, 0.2],
+    [-3.1, 0.0, 1.0], [-0.4, -1.0, 1.2], [4.0, -5.5, -0.6],
+  ], PALETTES[initialTheme]);
+
+  gInitial.group.position.set(-10.5, 7.8, 3.0);
+  gInitial.group.rotation.set(-0.1, 0.28, -0.12);
+  gInitial.group.scale.setScalar(0.94);
+  rInitial.group.position.set(11.2, -7.4, -1.5);
+  rInitial.group.rotation.set(0.12, -0.32, 0.1);
+  rInitial.group.scale.setScalar(0.96);
+  knotObject.scale.setScalar(0.72);
+  knotObject.position.z = -1.5;
+  structure.add(gInitial.group, rInitial.group);
+  const initials = [gInitial, rInitial];
 
   /* ------------------------------------------------------------------------ */
   /* Post-processing: EffectComposer + UnrealBloom for a premium glow         */
@@ -568,6 +652,14 @@ export function initHero(canvas, opts = {}) {
     wireframeMaterial.color.set(p.primary);
     wireframeMaterial.blending = p.blending;
     wireframeMaterial.needsUpdate = true;
+    for (const initial of initials) {
+      initial.wireMaterial.color.set(p.primary);
+      initial.wireMaterial.blending = p.blending;
+      initial.wireMaterial.needsUpdate = true;
+      initial.dustMaterial.color.set(p.primary);
+      initial.dustMaterial.blending = p.blending;
+      initial.dustMaterial.needsUpdate = true;
+    }
     updateWireframeOpacity();
 
     // Bloom strength flips live with the theme: a real glow in dark mode, all
@@ -582,6 +674,11 @@ export function initHero(canvas, opts = {}) {
   function updateWireframeOpacity() {
     const base = PALETTES[currentTheme].lineOpacity;
     wireframeMaterial.opacity = base * introEase * (1.0 - scrollCurrent * 0.9);
+    const fade = introEase * (1.0 - scrollCurrent * 0.9);
+    for (const initial of initials) {
+      initial.wireMaterial.opacity = base * 1.35 * fade;
+      initial.dustMaterial.opacity = 0.48 * fade;
+    }
   }
 
   /**
@@ -711,6 +808,10 @@ export function initHero(canvas, opts = {}) {
   let isVisible = true; // toggled by IntersectionObserver
   let isPaused = false; // toggled by pause()/resume()
   const clock = new THREE.Clock();
+  // Accumulated hover turns let each sculpture continue from its current pose
+  // instead of snapping back when the pointer leaves.
+  let gHoverTurn = 0;
+  let rHoverTurn = 0;
 
   /** Whether the loop is allowed to run right now. */
   function shouldRun() {
@@ -739,10 +840,28 @@ export function initHero(canvas, opts = {}) {
     // ---- Pointer hover strength: damp toward active/idle ------------------
     const uStrength = pointMaterial.uniforms.uPointerStrength;
     uStrength.value += (pointerStrengthTarget - uStrength.value) * 0.08;
+    const hoverDrive = uStrength.value;
+    gHoverTurn -= hoverDrive * delta * 0.18;
+    rHoverTurn += hoverDrive * delta * 0.15;
 
-    // Idle auto-rotation of the whole structure.
-    structure.rotation.y += config.autoRotate * delta;
-    structure.rotation.x = Math.sin(elapsed * 0.12) * 0.18;
+    // Three independent rhythms: the original knot anchors the composition
+    // while the initials orbit gently on different axes like kinetic sculpture.
+    // Hover deliberately sends each object in a different direction/axis.
+    knotObject.rotation.y += (config.autoRotate + hoverDrive * 0.1) * delta;
+    knotObject.rotation.x = Math.sin(elapsed * 0.05) * 0.18;
+    knotObject.position.y = Math.sin(elapsed * 0.09) * 0.7;
+
+    gInitial.group.rotation.y = 0.28 + Math.sin(elapsed * 0.075) * 0.32 + gHoverTurn;
+    gInitial.group.rotation.x = -0.1 + Math.sin(elapsed * 0.1 + 0.8) * 0.12;
+    gInitial.group.rotation.z = -0.12 + Math.sin(elapsed * 0.055) * 0.08 - gHoverTurn * 0.18;
+    gInitial.group.position.y = 7.8 + Math.sin(elapsed * 0.11) * 1.0;
+    gInitial.group.position.z = 3.0 + Math.cos(elapsed * 0.08) * 1.2;
+
+    rInitial.group.rotation.y = -0.32 + Math.sin(elapsed * 0.06 + 2.1) * 0.3 - rHoverTurn * 0.22;
+    rInitial.group.rotation.x = 0.12 + Math.sin(elapsed * 0.085 + 1.4) * 0.13 + rHoverTurn;
+    rInitial.group.rotation.z = 0.1 + Math.sin(elapsed * 0.065 + 2.4) * 0.08 + rHoverTurn * 0.12;
+    rInitial.group.position.y = -7.4 + Math.sin(elapsed * 0.1 + 2.2) * 0.9;
+    rInitial.group.position.z = -1.5 + Math.cos(elapsed * 0.067 + 1.1) * 1.1;
 
     // Damped camera parallax toward the pointer target (X/Y; Z owned by scroll).
     pointerCurrent.lerp(pointerTarget, config.parallaxDamping);
@@ -793,7 +912,8 @@ export function initHero(canvas, opts = {}) {
   if (reducedMotion) {
     // Compose one attractive static pose: fully assembled (uIntro = 1 from
     // init), no scroll dispersal, no hover — then render once and never loop.
-    structure.rotation.set(0.3, 0.6, 0);
+    structure.rotation.set(0, 0, 0);
+    knotObject.rotation.set(0.3, 0.6, 0);
     pointMaterial.uniforms.uTime.value = 1.5;
     camera.position.set(3, 2, config.cameraZ);
     camera.lookAt(scene.position);
@@ -896,6 +1016,12 @@ export function initHero(canvas, opts = {}) {
     pointMaterial.dispose();
     wireframeGeometry.dispose();
     wireframeMaterial.dispose();
+    for (const initial of initials) {
+      initial.wireGeometry.dispose();
+      initial.wireMaterial.dispose();
+      initial.dustGeometry.dispose();
+      initial.dustMaterial.dispose();
+    }
 
     // Renderer: free the WebGL context and internal caches.
     renderer.dispose();
