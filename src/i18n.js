@@ -29,7 +29,7 @@ export const translations = {
     "nav.work": "Work",
     "nav.building": "Building",
     "nav.approach": "Approach",
-    "nav.askAi": "Ask&nbsp;AI",
+    "nav.askAi": "Ask my AI",
     "nav.about": "About",
     "nav.contact": "Contact",
 
@@ -40,7 +40,7 @@ export const translations = {
     "hero.sub":
       "I'm Gagan — a senior frontend engineer and architect with 12+ years building web products at SAP and in aerospace. I lead Angular &amp; React teams, obsess over performance and design systems, and I build AI-powered products end-to-end.",
     "hero.ctaPrimary": "See the work →",
-    "hero.ctaGhost": "Ask my portfolio anything",
+    "hero.ctaGhost": "Meet my portfolio AI",
     "hero.scroll": "Scroll",
 
     /* ---- Proof strip labels ---- */
@@ -53,7 +53,7 @@ export const translations = {
 
     /* ---- Work section ---- */
     "work.eyebrow": "Selected work",
-    "work.title": "Products, not just screens.",
+    "work.title": "Work that moved the product.",
     "work.lead":
       "A few builds that show the range: a flagship healthcare SaaS, aerospace tooling, and enterprise platform work at SAP.",
 
@@ -107,7 +107,7 @@ export const translations = {
 
     /* ---- Approach ---- */
     "approach.eyebrow": "How I work",
-    "approach.title": "Senior habits, not just senior years.",
+    "approach.title": "Turning complexity into momentum.",
     "approach.p1h": "Architecture first",
     "approach.p1":
       "Design systems, micro-frontends, rendering and state boundaries chosen for how the product will grow — not just today's screen.",
@@ -122,16 +122,19 @@ export const translations = {
       "Shipping with agentic workflows and evals — using AI to move faster while keeping a senior engineer's judgment in the loop.",
 
     /* ---- Ask AI ---- */
-    "ask.eyebrow": "Interactive",
-    "ask.h2": "Ask my portfolio anything.",
+    "ask.eyebrow": "Portfolio AI · Live",
+    "ask.h2": "This portfolio can answer back.",
     "ask.p1":
-      "Instead of a wall of text, ask a question. This chat is powered by an LLM through a small serverless proxy I wrote — a live demo of the AI product work I do, running on my own site.",
+      "Ask directly about my experience, technical decisions, results, or fit for your role. The assistant is grounded in this portfolio and responds in English or French.",
+    "ask.proof1": "Career-grounded",
+    "ask.proof2": "Live answers",
+    "ask.proof3": "EN + FR",
     "ask.note":
       "Frontend widget + Cloudflare Worker proxy · streaming responses · key stays server-side.",
 
     /* ---- About ---- */
     "about.eyebrow": "About",
-    "about.title": "Twelve years of building. Still building.",
+    "about.title": "Twelve years deep. Still curious.",
     "about.p1":
       "I started in 2014 and have spent my career close to the code — <strong>enterprise applications at scale, Angular and React, design systems, micro-frontends, performance work, and leading engineers</strong> at SAP Labs and, today, on an aerospace platform at Adda Tech in Laval.",
     "about.p2":
@@ -179,7 +182,7 @@ export const translations = {
     "nav.work": "Travaux",
     "nav.building": "En cours",
     "nav.approach": "Approche",
-    "nav.askAi": "Demander&nbsp;à&nbsp;l'IA",
+    "nav.askAi": "Mon IA portfolio",
     "nav.about": "À propos",
     "nav.contact": "Contact",
 
@@ -190,7 +193,7 @@ export const translations = {
     "hero.sub":
       "Je suis Gagan — ingénieur et architecte frontend senior avec plus de 12 ans à bâtir des produits web chez SAP et dans l'aérospatiale. Je dirige des équipes Angular &amp; React, je suis obsédé par la performance et les design systems, et je crée des produits propulsés par l'IA, de bout en bout.",
     "hero.ctaPrimary": "Voir les réalisations →",
-    "hero.ctaGhost": "Posez une question à mon portfolio",
+    "hero.ctaGhost": "Découvrir mon IA portfolio",
     "hero.scroll": "Défiler",
 
     /* ---- Proof strip labels ---- */
@@ -203,7 +206,7 @@ export const translations = {
 
     /* ---- Work section ---- */
     "work.eyebrow": "Travaux sélectionnés",
-    "work.title": "Des produits, pas juste des écrans.",
+    "work.title": "Du travail qui fait avancer le produit.",
     "work.lead":
       "Quelques réalisations qui montrent l'étendue : un SaaS santé phare, des outils pour l'aérospatiale et du travail de plateforme d'entreprise chez SAP.",
 
@@ -259,7 +262,7 @@ export const translations = {
 
     /* ---- Approach ---- */
     "approach.eyebrow": "Ma façon de travailler",
-    "approach.title": "Des réflexes de senior, pas seulement des années.",
+    "approach.title": "Transformer la complexité en élan.",
     "approach.p1h": "L'architecture d'abord",
     "approach.p1":
       "Design systems, micro-frontends, frontières de rendu et d'état choisis en fonction de la croissance du produit — pas seulement de l'écran d'aujourd'hui.",
@@ -274,16 +277,19 @@ export const translations = {
       "Livrer avec des flux de travail agentiques et des évaluations — utiliser l'IA pour aller plus vite tout en gardant le jugement d'un ingénieur senior dans la boucle.",
 
     /* ---- Ask AI ---- */
-    "ask.eyebrow": "Interactif",
-    "ask.h2": "Posez une question à mon portfolio.",
+    "ask.eyebrow": "IA du portfolio · En direct",
+    "ask.h2": "Ce portfolio peut vous répondre.",
     "ask.p1":
-      "Plutôt qu'un mur de texte, posez une question. Ce clavardage est propulsé par un LLM via un petit proxy sans serveur que j'ai écrit — une démo en direct du travail de produit IA que je fais, tournant sur mon propre site.",
+      "Posez directement vos questions sur mon expérience, mes décisions techniques, mes résultats ou mon adéquation à votre poste. L'assistant s'appuie sur ce portfolio et répond en français ou en anglais.",
+    "ask.proof1": "Ancré dans mon parcours",
+    "ask.proof2": "Réponses en direct",
+    "ask.proof3": "FR + EN",
     "ask.note":
       "Composant frontend + proxy Cloudflare Worker · réponses en continu · la clé reste côté serveur.",
 
     /* ---- About ---- */
     "about.eyebrow": "À propos",
-    "about.title": "Douze ans à bâtir. Et ça continue.",
+    "about.title": "Douze ans d'expertise. Toujours curieux.",
     "about.p1":
       "J'ai débuté en 2014 et j'ai passé ma carrière au plus près du code — <strong>applications d'entreprise à grande échelle, Angular et React, design systems, micro-frontends, travail de performance et encadrement d'ingénieurs</strong> chez SAP Labs et, aujourd'hui, sur une plateforme aérospatiale chez Adda Tech à Laval.",
     "about.p2":

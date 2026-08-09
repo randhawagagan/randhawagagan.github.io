@@ -6,8 +6,7 @@
   <title>Gagan Randhawa — Frontend Architect & AI Product Builder</title>
   <meta name="description" content="Gagan Randhawa — Senior frontend engineer and architect with 12+ years building enterprise web products. Angular, React, TypeScript. Now building AI-powered products end-to-end." />
   <meta name="author" content="Gagan Randhawa" />
-  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-  <link rel="icon" type="image/png" href="gr-header-dark.png" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg?v=2" />
 
   <link rel="canonical" href="https://gaganrandhawa.me/" />
   <meta name="robots" content="index, follow" />
@@ -77,7 +76,7 @@
         <a href="#work" data-i18n="nav.work">Work</a>
         <a href="#flagship" data-i18n="nav.building">Building</a>
         <a href="#approach" data-i18n="nav.approach">Approach</a>
-        <a href="#ask" data-i18n="nav.askAi">Ask&nbsp;AI</a>
+        <a class="nav-ai" href="#ask"><span class="nav-ai-dot" aria-hidden="true"></span><span data-i18n="nav.askAi">Ask my AI</span></a>
         <a href="#about" data-i18n="nav.about">About</a>
         <a class="mobile-contact-link" href="#contact" data-i18n="nav.contact">Contact</a>
       </div>
@@ -109,7 +108,7 @@
       </p>
       <div class="hero-cta">
         <a class="btn btn-primary" href="#work" data-i18n="hero.ctaPrimary">See the work →</a>
-        <a class="btn btn-ghost" href="#ask" data-i18n="hero.ctaGhost">Ask my portfolio anything</a>
+        <a class="btn btn-ghost btn-ai" href="#ask"><span class="ai-spark" aria-hidden="true">✦</span><span data-i18n="hero.ctaGhost">Meet my portfolio AI</span><span aria-hidden="true">→</span></a>
       </div>
     </div>
     <div class="hero-scroll" data-i18n="hero.scroll">Scroll</div>
@@ -133,7 +132,7 @@
   <section class="section" id="work">
     <div class="wrap">
       <p class="eyebrow reveal" data-i18n="work.eyebrow">Selected work</p>
-      <h2 class="section-title reveal" data-i18n="work.title">Products, not just screens.</h2>
+      <h2 class="section-title reveal" data-i18n="work.title">Work that moved the product.</h2>
       <p class="section-lead reveal" data-i18n="work.lead">A few builds that show the range: a flagship healthcare SaaS, aerospace tooling, and enterprise platform work at SAP.</p>
 
       <div class="work-list">
@@ -262,7 +261,7 @@
   <section class="section" id="approach">
     <div class="wrap">
       <p class="eyebrow reveal" data-i18n="approach.eyebrow">How I work</p>
-      <h2 class="section-title reveal" data-i18n="approach.title">Senior habits, not just senior years.</h2>
+      <h2 class="section-title reveal" data-i18n="approach.title">Turning complexity into momentum.</h2>
       <div class="approach-grid">
         <div class="pillar reveal"><div class="num">01</div><h3 data-i18n="approach.p1h">Architecture first</h3><p data-i18n="approach.p1">Design systems, micro-frontends, rendering and state boundaries chosen for how the product will grow — not just today's screen.</p></div>
         <div class="pillar reveal"><div class="num">02</div><h3 data-i18n="approach.p2h">Performance as a feature</h3><p data-i18n="approach.p2">Core Web Vitals treated as budgets. Profiling, code-splitting, and parallelization with measured p75 deltas, not vibes.</p></div>
@@ -277,9 +276,10 @@
     <div class="wrap">
       <div class="ai-shell">
         <div class="ai-copy">
-          <p class="eyebrow reveal" data-i18n="ask.eyebrow">Interactive</p>
-          <h2 class="reveal" data-i18n="ask.h2">Ask my portfolio anything.</h2>
-          <p class="reveal" data-i18n="ask.p1">Instead of a wall of text, ask a question. This chat is powered by an LLM through a small serverless proxy I wrote — a live demo of the AI product work I do, running on my own site.</p>
+          <p class="eyebrow reveal" data-i18n="ask.eyebrow">Portfolio AI · Live</p>
+          <h2 class="reveal" data-i18n="ask.h2">This portfolio can answer back.</h2>
+          <p class="reveal" data-i18n="ask.p1">Ask directly about my experience, technical decisions, results, or fit for your role. The assistant is grounded in this portfolio and responds in English or French.</p>
+          <div class="ai-proof reveal" aria-label="Portfolio AI capabilities"><span data-i18n="ask.proof1">Career-grounded</span><span data-i18n="ask.proof2">Live answers</span><span data-i18n="ask.proof3">EN + FR</span></div>
           <p class="note reveal" data-i18n="ask.note">Frontend widget + Cloudflare Worker proxy · streaming responses · key stays server-side.</p>
         </div>
         <div id="ai-mount" class="reveal" aria-label="Ask my portfolio — AI chat"></div>
@@ -293,7 +293,7 @@
       <p class="eyebrow reveal" data-i18n="about.eyebrow">About</p>
       <div class="about-grid">
         <div class="about-body reveal">
-          <h2 class="section-title" style="margin-bottom:24px" data-i18n="about.title">Twelve years of building. Still building.</h2>
+          <h2 class="section-title" style="margin-bottom:24px" data-i18n="about.title">Twelve years deep. Still curious.</h2>
           <p data-i18n="about.p1">I started in 2014 and have spent my career close to the code — <strong>enterprise applications at scale, Angular and React, design systems, micro-frontends, performance work, and leading engineers</strong> at SAP Labs and, today, on an aerospace platform at Adda Tech in Laval.</p>
           <p data-i18n="about.p2">What I actually enjoy is <strong>solving hard technical problems and shipping polished products</strong> — not climbing an org chart. So I'm deepening frontend architecture and folding practical AI into how I build, aiming squarely at product engineering.</p>
           <p data-i18n="about.p3">Right now that means turning a decade of frontend depth into <strong>AI-powered products</strong>, built end-to-end with the same discipline I bring to enterprise work.</p>
