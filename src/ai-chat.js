@@ -32,7 +32,7 @@ const FALLBACK_INTRO =
   "Hi! I'm Gagan's portfolio assistant. Ask me about his skills, the SAP " +
   "and aerospace work, or whether he's a fit for a Lead Frontend role.";
 
-const FALLBACK_ANSWERS = [
+const FALLBACK_ANSWERS_EN = [
   {
     keywords: ["strongest", "strength", "best at", "good at", "skill"],
     text:
@@ -97,7 +97,7 @@ const FALLBACK_ANSWERS = [
   {
     keywords: ["contact", "email", "reach", "hire", "available"],
     text:
-      "You can reach Gagan at randhawa_gagan@live.com. He's open to senior and " +
+      "You can reach Gagan at randhawa_gagan@outlook.com. He's open to senior and " +
       "lead frontend conversations, especially where performance, design " +
       "systems, or AI-in-product work is involved.",
   },
@@ -109,6 +109,44 @@ const FALLBACK_DEFAULT =
   "his React/Angular/TypeScript stack, or whether he'd fit a Lead Frontend " +
   "role. Which would you like to hear about?";
 
+const FALLBACK_ANSWERS_FR = [
+  {
+    keywords: ["force", "fort", "compétence", "competence", "meilleur"],
+    text: "La grande force de Gagan est de transformer des frontends complexes à grande échelle en systèmes rapides et maintenables. Il combine performance web, systèmes de design et leadership technique, tout en restant très proche du code.",
+  },
+  {
+    keywords: ["sap", "labs"],
+    text: "Chez SAP Labs, Gagan a travaillé sur des interfaces d'entreprise à grande échelle. Il s'est concentré sur les bibliothèques de composants réutilisables, l'accessibilité, la performance et la santé d'une importante base de code TypeScript et Angular.",
+  },
+  {
+    keywords: ["aérospatiale", "aerospatiale", "adda", "c#", "csharp"],
+    text: "Chez Adda Tech, Gagan a travaillé sur un logiciel aérospatial avec un frontend React et TypeScript et un backend C#. Ce domaine exige des interfaces fiables, précises et capables de rendre des données complexes faciles à comprendre.",
+  },
+  {
+    keywords: ["lead", "responsable", "architecte", "poste", "adéquation", "adequation"],
+    text: "Oui. Gagan correspond bien à un poste de Lead Frontend ou d'Architecte Frontend : il prend en charge l'architecture, les systèmes de design et la performance, tout en accompagnant les ingénieurs et en restant opérationnel sur React, Angular et TypeScript.",
+  },
+  {
+    keywords: ["ia", "llm", "gpt", "produit", "actuellement", "construit"],
+    text: "Gagan développe actuellement des produits propulsés par l'IA et intègre des LLM dans de vraies expériences utilisateur. Il s'intéresse notamment au streaming, aux solutions de repli fiables et à la protection des clés API côté serveur.",
+  },
+  {
+    keywords: ["react", "angular", "typescript", "technologie", "stack", "langage"],
+    text: "La stack principale de Gagan comprend React, Angular et TypeScript côté frontend, avec une expérience en C# côté backend. Il privilégie le typage fort, la performance et les systèmes de design pour garder les grandes applications maintenables.",
+  },
+  {
+    keywords: ["expérience", "experience", "parcours", "qui", "profil"],
+    text: "Gagan Randhawa est ingénieur frontend senior et architecte frontend avec plus de 11 ans d'expérience. Ancien de SAP Labs, il développe aujourd'hui des logiciels aérospatiaux chez Adda Tech et construit des produits propulsés par l'IA.",
+  },
+  {
+    keywords: ["contact", "courriel", "email", "joindre", "embaucher", "disponible"],
+    text: "Vous pouvez joindre Gagan à randhawa_gagan@outlook.com. Il est ouvert aux échanges concernant des postes senior ou lead frontend, particulièrement autour de la performance, des systèmes de design et de l'IA appliquée aux produits.",
+  },
+];
+
+const FALLBACK_DEFAULT_FR =
+  "Bonne question ! Je peux vous parler des forces de Gagan — performance, systèmes de design et leadership — de son expérience chez SAP Labs et dans l'aérospatiale, de sa stack React, Angular et TypeScript, ou de son adéquation à un poste de Lead Frontend.";
+
 /** Suggested-question chips shown above the input. */
 const SUGGESTIONS = [
   "What's Gagan's strongest skill?",
@@ -117,9 +155,8 @@ const SUGGESTIONS = [
 ];
 
 /* ------------------------------------------------------------------ *
- * Localized widget UI strings (EN/FR). The live AI *answers* stay in
- * English (the Worker's system prompt is English) — only the widget's
- * own chrome (greeting, chips, placeholder, labels) is translated.
+ * Localized widget UI strings (EN/FR). The selected locale is also sent to
+ * the Worker so live answers and graceful fallback states use the same language.
  * ------------------------------------------------------------------ */
 const UI_STRINGS = {
   en: {
@@ -161,12 +198,13 @@ function readLang() {
 }
 
 /** Pick a canned answer by keyword match. */
-function matchFallback(question) {
+function matchFallback(question, lang = "en") {
   const q = question.toLowerCase();
-  for (const entry of FALLBACK_ANSWERS) {
+  const answers = lang === "fr" ? FALLBACK_ANSWERS_FR : FALLBACK_ANSWERS_EN;
+  for (const entry of answers) {
     if (entry.keywords.some((k) => q.includes(k))) return entry.text;
   }
-  return FALLBACK_DEFAULT;
+  return lang === "fr" ? FALLBACK_DEFAULT_FR : FALLBACK_DEFAULT;
 }
 
 /* ------------------------------------------------------------------ *
@@ -499,7 +537,7 @@ export function initAiChat(rootEl, opts = {}) {
     const res = await fetch(endpoint, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ messages }),
+      body: JSON.stringify({ messages, locale: lang }),
       signal: abortController.signal,
     });
 
@@ -531,7 +569,7 @@ export function initAiChat(rootEl, opts = {}) {
    */
   function streamFallback(botEl, question) {
     return new Promise((resolve) => {
-      const answer = matchFallback(question);
+      const answer = matchFallback(question, lang);
 
       if (prefersReducedMotion()) {
         botEl.textContent = answer;
@@ -585,9 +623,10 @@ export function initAiChat(rootEl, opts = {}) {
       // Aborted by destroy() — nothing to report.
       if (err && err.name === "AbortError") return;
       typingEl.classList.add("aichat__msg--error");
-      typingEl.textContent =
-        "Sorry — I couldn't reach the assistant just now. Please try again in " +
-        "a moment, or email randhawa_gagan@live.com.";
+      typingEl.textContent = lang === "fr"
+        ? "Désolé, l'assistant est momentanément inaccessible. Réessayez dans un instant ou écrivez à randhawa_gagan@outlook.com."
+        : "Sorry — I couldn't reach the assistant just now. Please try again in " +
+          "a moment, or email randhawa_gagan@outlook.com.";
       scrollToBottom();
     } finally {
       abortController = null;
@@ -609,7 +648,7 @@ export function initAiChat(rootEl, opts = {}) {
   return {
     /**
      * Switch the widget's UI language. Re-labels the greeting, chips,
-     * placeholder, title and controls. Live AI answers stay English.
+     * placeholder, title and controls. New live and fallback answers follow it.
      * @param {"en"|"fr"} next
      */
     setLang(next) {

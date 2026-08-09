@@ -65,10 +65,11 @@ About Gagan Randhawa:
 - Core stack: React, Angular, TypeScript, with C# on the backend.
 - Now building AI-powered products, integrating LLMs into real shipping experiences.
 - Key strengths: web performance engineering, design systems, and technical leadership / mentoring.
-- Contact: randhawa_gagan@live.com.
+- Contact: randhawa_gagan@outlook.com.
 
 Guidelines:
 - Answer as a helpful, professional assistant representing Gagan's portfolio.
+- Reply in French when the requested locale is French; otherwise reply in the language used by the visitor.
 - Be concise and specific — a few sentences is usually right.
 - Never invent facts, projects, employers, or credentials beyond what is listed above. If asked something you don't know, say so and suggest emailing Gagan.
 - Speak positively but honestly. Do not fabricate metrics or claims.`;
@@ -79,8 +80,16 @@ const DAILY_CAP_MESSAGE =
   "Gagan Randhawa is a Senior Frontend Engineer / Frontend Architect with " +
   "11+ years of experience (ex-SAP Labs, aerospace at Adda Tech). He works in " +
   "React, Angular, and TypeScript, and is strongest in performance, design " +
-  "systems, and technical leadership. Reach him at randhawa_gagan@live.com, " +
+  "systems, and technical leadership. Reach him at randhawa_gagan@outlook.com, " +
   "or come back tomorrow to chat live.";
+
+const DAILY_CAP_MESSAGE_FR =
+  "La démo en direct a atteint sa limite quotidienne. En bref, Gagan Randhawa " +
+  "est ingénieur frontend senior et architecte frontend avec plus de 11 ans " +
+  "d'expérience, notamment chez SAP Labs et dans l'aérospatiale chez Adda Tech. " +
+  "Il travaille avec React, Angular et TypeScript et se distingue en performance, " +
+  "systèmes de design et leadership technique. Écrivez-lui à " +
+  "randhawa_gagan@outlook.com ou revenez demain pour clavarder en direct.";
 
 /* ------------------------------------------------------------------ *
  * Origin / CORS helpers
@@ -339,9 +348,11 @@ export default {
 
     // --- Parse & validate input ---
     let cleanMessages;
+    let locale = "en";
     try {
       const body = await request.json();
       cleanMessages = validate(body);
+      locale = body.locale === "fr" ? "fr" : "en";
     } catch (err) {
       return jsonError(err.message || "Invalid request.", 400, origin);
     }
@@ -355,7 +366,7 @@ export default {
      * once the cap is hit.
      */
     if (!(await withinDailyBudget(env))) {
-      return textResponse(DAILY_CAP_MESSAGE, origin);
+      return textResponse(locale === "fr" ? DAILY_CAP_MESSAGE_FR : DAILY_CAP_MESSAGE, origin);
     }
 
     // --- Call Anthropic (Haiku 4.5) with streaming enabled ---
@@ -372,7 +383,7 @@ export default {
           model: MODEL,
           max_tokens: MAX_TOKENS,
           stream: true,
-          system: SYSTEM_PROMPT,
+          system: `${SYSTEM_PROMPT}\n\nThe visitor's selected locale is ${locale === "fr" ? "French" : "English"}. Reply in that language.`,
           messages: cleanMessages,
         }),
       });
