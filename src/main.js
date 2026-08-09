@@ -9,7 +9,7 @@
 // Leave empty ("") to run the on-page chat in scripted-fallback mode.
 const AI_ENDPOINT = "https://ask-my-portfolio.gagzy-randhawa.workers.dev";
 
-import { initLang, applyLang } from "./i18n.js";
+import { initLang, applyLang, translations } from "./i18n.js";
 
 // Holds the Three.js hero API once it's initialized, so the theme toggle
 // can recolor the hero live.
@@ -100,6 +100,42 @@ let chatApi = null;
     if (active) { active.classList.add("active"); active.setAttribute("aria-current", "location"); }
   }, { rootMargin: "-28% 0px -60%", threshold: [0, 0.15, 0.4] });
   byId.forEach((_link, id) => { const section = document.getElementById(id); if (section) observer.observe(section); });
+})();
+
+/* ---- Premium surface light follows the pointer (mouse/pen only) ---- */
+(function premiumSurfaces() {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !window.matchMedia("(pointer: fine)").matches) return;
+  document.querySelectorAll(".premium-card").forEach((card) => {
+    card.addEventListener("pointermove", (event) => {
+      const rect = card.getBoundingClientRect();
+      card.style.setProperty("--mx", `${event.clientX - rect.left}px`);
+      card.style.setProperty("--my", `${event.clientY - rect.top}px`);
+    }, { passive: true });
+  });
+})();
+
+/* ---- Copy-email affordance with localized confirmation ---- */
+(function copyEmail() {
+  const button = document.querySelector(".copy-email");
+  if (!button) return;
+  const label = button.querySelector("span");
+  let timer = null;
+  button.addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(button.dataset.email || "");
+      const lang = document.documentElement.lang === "fr" ? "fr" : "en";
+      label.textContent = translations[lang]["contact.copied"];
+      button.classList.add("is-copied");
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        const current = document.documentElement.lang === "fr" ? "fr" : "en";
+        label.textContent = translations[current]["contact.copy"];
+        button.classList.remove("is-copied");
+      }, 2200);
+    } catch (_) {
+      window.location.href = `mailto:${button.dataset.email}`;
+    }
+  });
 })();
 
 /* ---- Count-up for metric numbers ---- */

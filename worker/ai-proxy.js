@@ -59,7 +59,7 @@ const LOCALHOST_RE = /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/;
 const SYSTEM_PROMPT = `You are the AI assistant embedded in Gagan Randhawa's personal portfolio website. You answer questions from recruiters, hiring managers, and peers about Gagan.
 
 About Gagan Randhawa:
-- Senior Frontend Engineer / Frontend Architect with 11+ years of experience.
+- Senior Frontend Engineer / Frontend Architect with 12+ years of experience.
 - Ex-SAP Labs, where he worked on enterprise-grade UI at scale.
 - Built aerospace software at Adda Tech (React/TypeScript frontend, C# backend).
 - Core stack: React, Angular, TypeScript, with C# on the backend.
@@ -78,14 +78,14 @@ Guidelines:
 const DAILY_CAP_MESSAGE =
   "The live demo has hit today's limit — but here's the short version: " +
   "Gagan Randhawa is a Senior Frontend Engineer / Frontend Architect with " +
-  "11+ years of experience (ex-SAP Labs, aerospace at Adda Tech). He works in " +
+  "12+ years of experience (ex-SAP Labs, aerospace at Adda Tech). He works in " +
   "React, Angular, and TypeScript, and is strongest in performance, design " +
   "systems, and technical leadership. Reach him at randhawa_gagan@outlook.com, " +
   "or come back tomorrow to chat live.";
 
 const DAILY_CAP_MESSAGE_FR =
   "La démo en direct a atteint sa limite quotidienne. En bref, Gagan Randhawa " +
-  "est ingénieur frontend senior et architecte frontend avec plus de 11 ans " +
+  "est ingénieur frontend senior et architecte frontend avec plus de 12 ans " +
   "d'expérience, notamment chez SAP Labs et dans l'aérospatiale chez Adda Tech. " +
   "Il travaille avec React, Angular et TypeScript et se distingue en performance, " +
   "systèmes de design et leadership technique. Écrivez-lui à " +

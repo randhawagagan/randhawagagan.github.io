@@ -17,13 +17,13 @@ export const translations = {
     /* ---- <head> / social meta ---- */
     "meta.title": "Gagan Randhawa — Frontend Architect & AI Product Builder",
     "meta.description":
-      "Gagan Randhawa — Senior frontend engineer and architect with 11+ years building enterprise web products. Angular, React, TypeScript. Now building AI-powered products end-to-end.",
+      "Gagan Randhawa — Senior frontend engineer and architect with 12+ years building enterprise web products. Angular, React, TypeScript. Now building AI-powered products end-to-end.",
     "meta.ogTitle": "Gagan Randhawa — Frontend Architect & AI Product Builder",
     "meta.ogDescription":
-      "11+ years building enterprise frontends at SAP and in aerospace. Leading Angular/React teams, obsessed with performance and design systems. Now building AI-powered products.",
+      "12+ years building enterprise frontends at SAP and in aerospace. Leading Angular/React teams, obsessed with performance and design systems. Now building AI-powered products.",
     "meta.twitterTitle": "Gagan Randhawa — Frontend Architect & AI Product Builder",
     "meta.twitterDescription":
-      "11+ years building enterprise frontends. Now building AI-powered products, end-to-end.",
+      "12+ years building enterprise frontends. Now building AI-powered products, end-to-end.",
 
     /* ---- Nav ---- */
     "nav.work": "Work",
@@ -38,7 +38,7 @@ export const translations = {
     "hero.h1":
       'Enterprise-grade frontends, now pointed at <span class="lit">AI products</span>.',
     "hero.sub":
-      "I'm Gagan — a senior frontend engineer and architect with 11+ years building web products at SAP and in aerospace. I lead Angular &amp; React teams, obsess over performance and design systems, and I build AI-powered products end-to-end.",
+      "I'm Gagan — a senior frontend engineer and architect with 12+ years building web products at SAP and in aerospace. I lead Angular &amp; React teams, obsess over performance and design systems, and I build AI-powered products end-to-end.",
     "hero.ctaPrimary": "See the work →",
     "hero.ctaGhost": "Ask my portfolio anything",
     "hero.scroll": "Scroll",
@@ -150,6 +150,14 @@ export const translations = {
     "contact.h2": "Building something<br />that needs a frontend lead?",
     "contact.lead":
       "Open to Lead Frontend / Frontend Architect roles, founding-engineer conversations, and product collaborations.",
+    "contact.available": "Available for the right opportunity",
+    "contact.based": "Based in",
+    "contact.timezone": "Time zone",
+    "contact.timezoneValue": "Eastern Time (ET)",
+    "contact.reply": "Typical reply",
+    "contact.replyValue": "Within 1–2 days",
+    "contact.copy": "Copy email",
+    "contact.copied": "Email copied",
 
     /* ---- Footer ---- */
     "foot.built": "Built with Three.js + a hand-written AI proxy · no template",
@@ -159,13 +167,13 @@ export const translations = {
     /* ---- <head> / social meta ---- */
     "meta.title": "Gagan Randhawa — Architecte frontend & créateur de produits IA",
     "meta.description":
-      "Gagan Randhawa — Ingénieur et architecte frontend senior avec plus de 11 ans à bâtir des produits web d'entreprise. Angular, React, TypeScript. Aujourd'hui, des produits propulsés par l'IA, de bout en bout.",
+      "Gagan Randhawa — Ingénieur et architecte frontend senior avec plus de 12 ans à bâtir des produits web d'entreprise. Angular, React, TypeScript. Aujourd'hui, des produits propulsés par l'IA, de bout en bout.",
     "meta.ogTitle": "Gagan Randhawa — Architecte frontend & créateur de produits IA",
     "meta.ogDescription":
-      "Plus de 11 ans à bâtir des frontends d'entreprise chez SAP et dans l'aérospatiale. Direction d'équipes Angular/React, obsédé par la performance et les design systems. Aujourd'hui, des produits propulsés par l'IA.",
+      "Plus de 12 ans à bâtir des frontends d'entreprise chez SAP et dans l'aérospatiale. Direction d'équipes Angular/React, obsédé par la performance et les design systems. Aujourd'hui, des produits propulsés par l'IA.",
     "meta.twitterTitle": "Gagan Randhawa — Architecte frontend & créateur de produits IA",
     "meta.twitterDescription":
-      "Plus de 11 ans à bâtir des frontends d'entreprise. Aujourd'hui, des produits propulsés par l'IA, de bout en bout.",
+      "Plus de 12 ans à bâtir des frontends d'entreprise. Aujourd'hui, des produits propulsés par l'IA, de bout en bout.",
 
     /* ---- Nav ---- */
     "nav.work": "Travaux",
@@ -180,7 +188,7 @@ export const translations = {
     "hero.h1":
       'Des frontends de calibre entreprise, désormais tournés vers les <span class="lit">produits IA</span>.',
     "hero.sub":
-      "Je suis Gagan — ingénieur et architecte frontend senior avec plus de 11 ans à bâtir des produits web chez SAP et dans l'aérospatiale. Je dirige des équipes Angular &amp; React, je suis obsédé par la performance et les design systems, et je crée des produits propulsés par l'IA, de bout en bout.",
+      "Je suis Gagan — ingénieur et architecte frontend senior avec plus de 12 ans à bâtir des produits web chez SAP et dans l'aérospatiale. Je dirige des équipes Angular &amp; React, je suis obsédé par la performance et les design systems, et je crée des produits propulsés par l'IA, de bout en bout.",
     "hero.ctaPrimary": "Voir les réalisations →",
     "hero.ctaGhost": "Posez une question à mon portfolio",
     "hero.scroll": "Défiler",
@@ -294,6 +302,14 @@ export const translations = {
     "contact.h2": "Vous bâtissez quelque chose<br />qui a besoin d'un responsable frontend ?",
     "contact.lead":
       "Ouvert aux postes de responsable frontend / architecte frontend, aux échanges d'ingénieur fondateur et aux collaborations produit.",
+    "contact.available": "Disponible pour la bonne occasion",
+    "contact.based": "Basé à",
+    "contact.timezone": "Fuseau horaire",
+    "contact.timezoneValue": "Heure de l'Est (HE)",
+    "contact.reply": "Réponse habituelle",
+    "contact.replyValue": "Sous 1 à 2 jours",
+    "contact.copy": "Copier le courriel",
+    "contact.copied": "Courriel copié",
 
     /* ---- Footer ---- */
     "foot.built": "Construit avec Three.js + un proxy IA écrit à la main · sans gabarit",

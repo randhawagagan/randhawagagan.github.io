@@ -37,7 +37,7 @@ const FALLBACK_ANSWERS_EN = [
     keywords: ["strongest", "strength", "best at", "good at", "skill"],
     text:
       "Gagan's strongest edge is turning messy, large-scale frontends into " +
-      "fast, maintainable systems. Over 11+ years he's specialised in " +
+      "fast, maintainable systems. Over 12+ years he's specialised in " +
       "performance engineering (shaving seconds off enterprise React/Angular " +
       "apps), design systems that scale across teams, and the technical " +
       "leadership to land them — mentoring engineers and setting the " +
@@ -89,7 +89,7 @@ const FALLBACK_ANSWERS_EN = [
     keywords: ["experience", "years", "background", "who", "about"],
     text:
       "Gagan Randhawa is a Senior Frontend Engineer / Frontend Architect with " +
-      "11+ years of experience. He's ex-SAP Labs, has shipped aerospace " +
+      "12+ years of experience. He's ex-SAP Labs, has shipped aerospace " +
       "software at Adda Tech, works primarily in React, Angular, and " +
       "TypeScript, and is now building AI-powered products. His strengths are " +
       "performance, design systems, and technical leadership.",
@@ -136,7 +136,7 @@ const FALLBACK_ANSWERS_FR = [
   },
   {
     keywords: ["expérience", "experience", "parcours", "qui", "profil"],
-    text: "Gagan Randhawa est ingénieur frontend senior et architecte frontend avec plus de 11 ans d'expérience. Ancien de SAP Labs, il développe aujourd'hui des logiciels aérospatiaux chez Adda Tech et construit des produits propulsés par l'IA.",
+    text: "Gagan Randhawa est ingénieur frontend senior et architecte frontend avec plus de 12 ans d'expérience. Ancien de SAP Labs, il développe aujourd'hui des logiciels aérospatiaux chez Adda Tech et construit des produits propulsés par l'IA.",
   },
   {
     keywords: ["contact", "courriel", "email", "joindre", "embaucher", "disponible"],
