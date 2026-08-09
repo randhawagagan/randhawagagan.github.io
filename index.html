@@ -32,6 +32,15 @@
   <meta name="twitter:description" content="11+ years building enterprise frontends. Now building AI-powered products, end-to-end." />
   <meta name="twitter:image" content="https://gaganrandhawa.me/og-cover.png" />
 
+  <!-- Resolve the saved/system theme before CSS paints to prevent a flash. -->
+  <script>
+    (() => {
+      const saved = localStorage.getItem('gr-theme');
+      const theme = saved || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.dataset.theme = theme;
+    })();
+  </script>
+
   <!-- Structured data: Person -->
   <script type="application/ld+json">
   {
@@ -55,6 +64,7 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
   <!-- ================= NAV ================= -->
   <nav class="nav">
     <div class="nav-inner">
@@ -62,7 +72,7 @@
         <span class="glyph">GR</span>
         <span>Gagan&nbsp;Randhawa</span>
       </a>
-      <div class="nav-links">
+      <div class="nav-links" id="primary-nav">
         <a href="#work" data-i18n="nav.work">Work</a>
         <a href="#flagship" data-i18n="nav.building">Building</a>
         <a href="#approach" data-i18n="nav.approach">Approach</a>
@@ -70,15 +80,18 @@
         <a href="#about" data-i18n="nav.about">About</a>
       </div>
       <div class="nav-actions">
-        <a class="btn btn-ghost" href="#contact" style="padding:9px 16px" data-i18n="nav.contact">Contact</a>
-        <button class="icon-btn lang-toggle" id="lang-toggle" aria-label="Switch language" title="Switch language">EN</button>
-        <button class="icon-btn" id="theme-toggle" aria-label="Toggle light and dark theme" title="Toggle theme">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <a class="btn btn-ghost nav-contact" href="#contact" data-i18n="nav.contact">Contact</a>
+        <button class="icon-btn lang-toggle" id="lang-toggle" aria-label="Passer au français" title="Passer au français"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.3 3 14.7 0 18M12 3c-3 3.3-3 14.7 0 18"/></svg><span>FR</span></button>
+        <button class="icon-btn" id="theme-toggle" aria-label="Use light theme" title="Use light theme" aria-pressed="true">
+          <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+          <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
         </button>
+        <button class="icon-btn menu-toggle" id="menu-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="primary-nav"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
       </div>
     </div>
   </nav>
 
+  <main id="main-content">
   <!-- ================= HERO ================= -->
   <header class="hero" id="top">
     <div class="hero-canvas-wrap" id="hero-canvas-wrap" aria-hidden="true">
@@ -216,10 +229,10 @@
       <p class="eyebrow reveal" data-i18n="approach.eyebrow">How I work</p>
       <h2 class="section-title reveal" data-i18n="approach.title">Senior habits, not just senior years.</h2>
       <div class="approach-grid">
-        <div class="pillar reveal"><div class="num">01</div><h4 data-i18n="approach.p1h">Architecture first</h4><p data-i18n="approach.p1">Design systems, micro-frontends, rendering and state boundaries chosen for how the product will grow — not just today's screen.</p></div>
-        <div class="pillar reveal"><div class="num">02</div><h4 data-i18n="approach.p2h">Performance as a feature</h4><p data-i18n="approach.p2">Core Web Vitals treated as budgets. Profiling, code-splitting, and parallelization with measured p75 deltas, not vibes.</p></div>
-        <div class="pillar reveal"><div class="num">03</div><h4 data-i18n="approach.p3h">Tested &amp; observable</h4><p data-i18n="approach.p3">TDD where it counts, unit + E2E coverage, and instrumentation so regressions show up before users do.</p></div>
-        <div class="pillar reveal"><div class="num">04</div><h4 data-i18n="approach.p4h">AI-augmented delivery</h4><p data-i18n="approach.p4">Shipping with agentic workflows and evals — using AI to move faster while keeping a senior engineer's judgment in the loop.</p></div>
+        <div class="pillar reveal"><div class="num">01</div><h3 data-i18n="approach.p1h">Architecture first</h3><p data-i18n="approach.p1">Design systems, micro-frontends, rendering and state boundaries chosen for how the product will grow — not just today's screen.</p></div>
+        <div class="pillar reveal"><div class="num">02</div><h3 data-i18n="approach.p2h">Performance as a feature</h3><p data-i18n="approach.p2">Core Web Vitals treated as budgets. Profiling, code-splitting, and parallelization with measured p75 deltas, not vibes.</p></div>
+        <div class="pillar reveal"><div class="num">03</div><h3 data-i18n="approach.p3h">Tested &amp; observable</h3><p data-i18n="approach.p3">TDD where it counts, unit + E2E coverage, and instrumentation so regressions show up before users do.</p></div>
+        <div class="pillar reveal"><div class="num">04</div><h3 data-i18n="approach.p4h">AI-augmented delivery</h3><p data-i18n="approach.p4">Shipping with agentic workflows and evals — using AI to move faster while keeping a senior engineer's judgment in the loop.</p></div>
       </div>
     </div>
   </section>
@@ -267,12 +280,13 @@
       <h2 class="reveal" data-i18n="contact.h2">Building something<br />that needs a frontend lead?</h2>
       <p class="lead reveal" data-i18n="contact.lead">Open to Lead Frontend / Frontend Architect roles, founding-engineer conversations, and product collaborations.</p>
       <div class="contact-links reveal">
-        <a class="btn btn-primary" href="mailto:randhawa_gagan@outlook.com">randhawa_gagan@outlook.com</a>
-        <a class="btn btn-ghost" href="https://www.linkedin.com/in/gaganrandhawa91" target="_blank" rel="noopener">LinkedIn</a>
-        <a class="btn btn-ghost" href="https://github.com/randhawagagan" target="_blank" rel="noopener">GitHub</a>
+        <a class="btn btn-primary" href="mailto:randhawa_gagan@outlook.com"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18v14H3zM3 6l9 7 9-7"/></svg>randhawa_gagan@outlook.com</a>
+        <a class="btn btn-ghost" href="https://www.linkedin.com/in/gaganrandhawa91" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9v10M6 5.5v.1M10 19v-6c0-2 1.2-3.5 3.5-3.5S17 11 17 13v6M3 3h18v18H3z"/></svg>LinkedIn</a>
+        <a class="btn btn-ghost" href="https://github.com/randhawagagan" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 19c-4.5 1.5-4.5-2.5-6-3m12 6v-3.9c0-1.1.1-1.5-.5-2.1 3.1-.3 6.4-1.5 6.4-7A5.5 5.5 0 0 0 19.5 5c.1-.4.6-2-.1-4 0 0-1.1-.4-4.4 1.5a15.4 15.4 0 0 0-8 0C3.7.6 2.6 1 2.6 1c-.7 2-.2 3.6-.1 4A5.5 5.5 0 0 0 1.1 9c0 5.5 3.3 6.7 6.4 7-.5.5-.6 1-.5 2.1V22"/></svg>GitHub</a>
       </div>
     </div>
   </section>
+  </main>
 
   <footer class="foot">
     <div class="foot-inner">

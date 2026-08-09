@@ -23,7 +23,14 @@ let chatApi = null;
   applyLang(lang);
   const btn = document.getElementById("lang-toggle");
   if (!btn) return;
-  const paint = () => { btn.textContent = lang.toUpperCase(); };
+  const paint = () => {
+    const target = lang === "en" ? "FR" : "EN";
+    const label = lang === "en" ? "Passer au français" : "Switch to English";
+    const text = btn.querySelector("span");
+    if (text) text.textContent = target;
+    btn.setAttribute("aria-label", label);
+    btn.title = label;
+  };
   paint();
   btn.addEventListener("click", () => {
     lang = lang === "en" ? "fr" : "en";
@@ -36,18 +43,63 @@ let chatApi = null;
 /* ---- Theme toggle (persisted) ---- */
 (function theme() {
   const root = document.documentElement;
-  const saved = localStorage.getItem("gr-theme");
-  if (saved) root.setAttribute("data-theme", saved);
   const btn = document.getElementById("theme-toggle");
   if (!btn) return;
+  const paint = () => {
+    const current = root.getAttribute("data-theme") || "dark";
+    const nextLabel = current === "dark" ? "Use light theme" : "Use dark theme";
+    btn.setAttribute("aria-label", nextLabel);
+    btn.setAttribute("aria-pressed", String(current === "dark"));
+    btn.title = nextLabel;
+  };
+  paint();
   btn.addEventListener("click", () => {
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const current = root.getAttribute("data-theme") || (prefersDark ? "dark" : "light");
+    const current = root.getAttribute("data-theme") || "dark";
     const next = current === "dark" ? "light" : "dark";
     root.setAttribute("data-theme", next);
     localStorage.setItem("gr-theme", next);
+    paint();
     if (heroApi && heroApi.setTheme) heroApi.setTheme(next);
   });
+})();
+
+/* ---- Mobile navigation ---- */
+(function mobileNav() {
+  const toggle = document.getElementById("menu-toggle");
+  const links = document.getElementById("primary-nav");
+  if (!toggle || !links) return;
+  const close = () => {
+    links.classList.remove("open");
+    toggle.setAttribute("aria-expanded", "false");
+    toggle.setAttribute("aria-label", "Open menu");
+  };
+  toggle.addEventListener("click", () => {
+    const open = !links.classList.contains("open");
+    links.classList.toggle("open", open);
+    toggle.setAttribute("aria-expanded", String(open));
+    toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+  });
+  links.addEventListener("click", (event) => {
+    if (event.target.closest("a")) close();
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") { close(); toggle.focus(); }
+  });
+})();
+
+/* ---- Active section navigation ---- */
+(function activeNavigation() {
+  const links = Array.from(document.querySelectorAll(".nav-links a[href^='#']"));
+  if (!("IntersectionObserver" in window) || !links.length) return;
+  const byId = new Map(links.map((link) => [link.getAttribute("href").slice(1), link]));
+  const observer = new IntersectionObserver((entries) => {
+    const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+    if (!visible) return;
+    links.forEach((link) => { link.classList.remove("active"); link.removeAttribute("aria-current"); });
+    const active = byId.get(visible.target.id);
+    if (active) { active.classList.add("active"); active.setAttribute("aria-current", "location"); }
+  }, { rootMargin: "-28% 0px -60%", threshold: [0, 0.15, 0.4] });
+  byId.forEach((_link, id) => { const section = document.getElementById(id); if (section) observer.observe(section); });
 })();
 
 /* ---- Count-up for metric numbers ---- */
