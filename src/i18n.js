@@ -60,7 +60,7 @@ export const translations = {
     /* Case 1 — ClinicMaster */
     "case1.index": "01 — 2022–present · Adda Tech, Montréal",
     "case1.title": "ClinicMaster — Healthcare SaaS",
-    "case1.role": "Squad Lead · flagship product front-end",
+    "case1.role": "Squad Lead · Frontend Architecture",
     "case1.desc":
       "Adda Tech's flagship: a cloud platform running scheduling, charting, billing, and analytics for multi-location clinic networks (physio, mental health, sleep, aesthetics). I built the front-end architecture — a reusable component library, Redux + TypeScript state, and per-franchise PWA theming — for a SOC&nbsp;2 / HIPAA / Québec&nbsp;Law&nbsp;25-compliant product on Azure.",
     "case1.m1": "feature delivery time with a 40+ component design-system library",
@@ -70,7 +70,7 @@ export const translations = {
     /* Case 2 — Aerospace */
     "case2.index": "02 — 2022–present · Adda Tech, Montréal",
     "case2.title": "Aerospace Parts Platform",
-    "case2.role": "Squad Lead · Front-end architecture",
+    "case2.role": "Squad Lead · Frontend Architecture",
     "case2.desc":
       "Front-end architecture for an aerospace application managing airplane parts — Angular &amp; React dashboards. Refactored the render-critical path with profiling and lazy loading for a materially faster, calmer UI, and shipped it through Dockerized CI/CD on AWS.",
     "case2.m1": "p75 LCP via code-splitting, lazy loading &amp; profiling",
@@ -143,7 +143,7 @@ export const translations = {
       "Right now that means turning a decade of frontend depth into <strong>AI-powered products</strong>, built end-to-end with the same discipline I bring to enterprise work.",
 
     /* Timeline roles */
-    "tl1.role": "Squad Lead",
+    "tl1.role": "Squad Lead (Team Lead)",
     "tl2.role": "Front-End Lead / Senior Dev (T3)",
     "tl3.role": "Associate Programming Analyst",
     "tl4.role": "B.E. Computer Science",
@@ -213,7 +213,7 @@ export const translations = {
     /* Case 1 — ClinicMaster */
     "case1.index": "01 — 2022–aujourd'hui · Adda Tech, Montréal",
     "case1.title": "ClinicMaster — SaaS santé",
-    "case1.role": "Chef d'équipe · front-end du produit phare",
+    "case1.role": "Chef d'équipe · Architecture front-end",
     "case1.desc":
       "Le produit phare d'Adda Tech : une plateforme infonuagique gérant la prise de rendez-vous, les dossiers, la facturation et l'analytique pour des réseaux de cliniques multi-sites (physio, santé mentale, sommeil, esthétique). J'ai bâti l'architecture front-end — une bibliothèque de composants réutilisables, un état Redux + TypeScript et un thème PWA par franchise — pour un produit conforme à SOC&nbsp;2 / HIPAA / la Loi&nbsp;25 du Québec, sur Azure.",
     "case1.m1":
