@@ -63,14 +63,15 @@
         <span>Gagan&nbsp;Randhawa</span>
       </a>
       <div class="nav-links">
-        <a href="#work">Work</a>
-        <a href="#flagship">Building</a>
-        <a href="#approach">Approach</a>
-        <a href="#ask">Ask&nbsp;AI</a>
-        <a href="#about">About</a>
+        <a href="#work" data-i18n="nav.work">Work</a>
+        <a href="#flagship" data-i18n="nav.building">Building</a>
+        <a href="#approach" data-i18n="nav.approach">Approach</a>
+        <a href="#ask" data-i18n="nav.askAi">Ask&nbsp;AI</a>
+        <a href="#about" data-i18n="nav.about">About</a>
       </div>
       <div class="nav-actions">
-        <a class="btn btn-ghost" href="#contact" style="padding:9px 16px">Contact</a>
+        <a class="btn btn-ghost" href="#contact" style="padding:9px 16px" data-i18n="nav.contact">Contact</a>
+        <button class="icon-btn lang-toggle" id="lang-toggle" aria-label="Switch language" title="Switch language">EN</button>
         <button class="icon-btn" id="theme-toggle" aria-label="Toggle light and dark theme" title="Toggle theme">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
         </button>
@@ -84,31 +85,31 @@
       <canvas id="hero-canvas"></canvas>
     </div>
     <div class="wrap hero-content">
-      <p class="eyebrow">Frontend Architect · AI Product Builder · Montréal, QC</p>
-      <h1>Enterprise-grade frontends, now pointed at <span class="lit">AI products</span>.</h1>
-      <p class="sub">
+      <p class="eyebrow" data-i18n="hero.eyebrow">Frontend Architect · AI Product Builder · Montréal, QC</p>
+      <h1 data-i18n="hero.h1">Enterprise-grade frontends, now pointed at <span class="lit">AI products</span>.</h1>
+      <p class="sub" data-i18n="hero.sub">
         I'm Gagan — a senior frontend engineer and architect with 11+ years building
         web products at SAP and in aerospace. I lead Angular &amp; React teams, obsess over
         performance and design systems, and I build AI-powered products end-to-end.
       </p>
       <div class="hero-cta">
-        <a class="btn btn-primary" href="#work">See the work →</a>
-        <a class="btn btn-ghost" href="#ask">Ask my portfolio anything</a>
+        <a class="btn btn-primary" href="#work" data-i18n="hero.ctaPrimary">See the work →</a>
+        <a class="btn btn-ghost" href="#ask" data-i18n="hero.ctaGhost">Ask my portfolio anything</a>
       </div>
     </div>
-    <div class="hero-scroll">Scroll</div>
+    <div class="hero-scroll" data-i18n="hero.scroll">Scroll</div>
   </header>
 
   <!-- ================= PROOF ================= -->
   <section class="section" id="proof" aria-label="Impact metrics">
     <div class="wrap">
       <div class="proof-grid reveal">
-        <div class="metric"><div class="val"><em data-count="11" data-suffix="+">11+</em></div><div class="lbl">Years<br />engineering</div></div>
-        <div class="metric"><div class="val">2.9→<em>1.4</em>s</div><div class="lbl">p75 LCP<br />improved</div></div>
-        <div class="metric"><div class="val">6.1→<em>1.9</em>s</div><div class="lbl">Initial load<br />cut</div></div>
-        <div class="metric"><div class="val"><em data-count="95">95</em>%</div><div class="lbl">Test<br />coverage</div></div>
-        <div class="metric"><div class="val"><em data-count="8">8</em></div><div class="lbl">Engineers<br />led</div></div>
-        <div class="metric"><div class="val"><em data-count="40" data-suffix="+">40+</em></div><div class="lbl">Design-system<br />components</div></div>
+        <div class="metric"><div class="val"><em data-count="11" data-suffix="+">11+</em></div><div class="lbl" data-i18n="proof.years">Years<br />engineering</div></div>
+        <div class="metric"><div class="val">2.9→<em>1.4</em>s</div><div class="lbl" data-i18n="proof.lcp">p75 LCP<br />improved</div></div>
+        <div class="metric"><div class="val">6.1→<em>1.9</em>s</div><div class="lbl" data-i18n="proof.load">Initial load<br />cut</div></div>
+        <div class="metric"><div class="val"><em data-count="95">95</em>%</div><div class="lbl" data-i18n="proof.coverage">Test<br />coverage</div></div>
+        <div class="metric"><div class="val"><em data-count="8">8</em></div><div class="lbl" data-i18n="proof.led">Engineers<br />led</div></div>
+        <div class="metric"><div class="val"><em data-count="40" data-suffix="+">40+</em></div><div class="lbl" data-i18n="proof.ds">Design-system<br />components</div></div>
       </div>
     </div>
   </section>
@@ -116,72 +117,72 @@
   <!-- ================= WORK ================= -->
   <section class="section" id="work">
     <div class="wrap">
-      <p class="eyebrow reveal">Selected work</p>
-      <h2 class="section-title reveal">Products, not just screens.</h2>
-      <p class="section-lead reveal">A few builds that show the range: a flagship healthcare SaaS, aerospace tooling, and enterprise platform work at SAP.</p>
+      <p class="eyebrow reveal" data-i18n="work.eyebrow">Selected work</p>
+      <h2 class="section-title reveal" data-i18n="work.title">Products, not just screens.</h2>
+      <p class="section-lead reveal" data-i18n="work.lead">A few builds that show the range: a flagship healthcare SaaS, aerospace tooling, and enterprise platform work at SAP.</p>
 
       <div class="work-list">
         <!-- Case 1 — ClinicMaster (flagship) -->
         <article class="case reveal">
           <div>
-            <div class="case-index">01 — 2022–present · Adda Tech, Montréal</div>
-            <h3>ClinicMaster — Healthcare SaaS</h3>
-            <div class="role">Senior Software Engineer · flagship product front-end</div>
-            <p>Adda Tech's flagship: a cloud platform running scheduling, charting, billing, and analytics for multi-location clinic networks (physio, mental health, sleep, aesthetics). I built the front-end architecture — a reusable component library, Redux + TypeScript state, and per-franchise PWA theming — for a SOC&nbsp;2 / HIPAA / Québec&nbsp;Law&nbsp;25-compliant product on Azure.</p>
+            <div class="case-index" data-i18n="case1.index">01 — 2022–present · Adda Tech, Montréal</div>
+            <h3 data-i18n="case1.title">ClinicMaster — Healthcare SaaS</h3>
+            <div class="role" data-i18n="case1.role">Senior Software Engineer · flagship product front-end</div>
+            <p data-i18n="case1.desc">Adda Tech's flagship: a cloud platform running scheduling, charting, billing, and analytics for multi-location clinic networks (physio, mental health, sleep, aesthetics). I built the front-end architecture — a reusable component library, Redux + TypeScript state, and per-franchise PWA theming — for a SOC&nbsp;2 / HIPAA / Québec&nbsp;Law&nbsp;25-compliant product on Azure.</p>
             <div class="tags"><span>Angular</span><span>React</span><span>TypeScript</span><span>Redux</span><span>PWA</span><span>Design System</span><span>Azure</span></div>
           </div>
           <div class="case-metrics">
-            <div class="case-metric"><span class="m-val"><em>−50</em>%</span><span class="m-lbl">feature delivery time with a 40+ component design-system library</span></div>
-            <div class="case-metric"><span class="m-val"><em>+20</em>%</span><span class="m-lbl">next-gen portal adoption via per-franchise dynamic PWA manifests</span></div>
-            <div class="case-metric"><span class="m-val">SOC&nbsp;2</span><span class="m-lbl">HIPAA · PHIPA · Québec Law 25 — regulated, multi-location scale</span></div>
+            <div class="case-metric"><span class="m-val"><em>−50</em>%</span><span class="m-lbl" data-i18n="case1.m1">feature delivery time with a 40+ component design-system library</span></div>
+            <div class="case-metric"><span class="m-val"><em>+20</em>%</span><span class="m-lbl" data-i18n="case1.m2">next-gen portal adoption via per-franchise dynamic PWA manifests</span></div>
+            <div class="case-metric"><span class="m-val">SOC&nbsp;2</span><span class="m-lbl" data-i18n="case1.m3">HIPAA · PHIPA · Québec Law 25 — regulated, multi-location scale</span></div>
           </div>
         </article>
 
         <!-- Case 2 — Aerospace -->
         <article class="case reveal">
           <div>
-            <div class="case-index">02 — 2022–present · Adda Tech, Montréal</div>
-            <h3>Aerospace Parts Platform</h3>
-            <div class="role">Senior Software Engineer · Front-end lead</div>
-            <p>Front-end architecture for an aerospace application managing airplane parts — Angular &amp; React dashboards. Refactored the render-critical path with profiling and lazy loading for a materially faster, calmer UI, and shipped it through Dockerized CI/CD on AWS.</p>
+            <div class="case-index" data-i18n="case2.index">02 — 2022–present · Adda Tech, Montréal</div>
+            <h3 data-i18n="case2.title">Aerospace Parts Platform</h3>
+            <div class="role" data-i18n="case2.role">Senior Software Engineer · Front-end lead</div>
+            <p data-i18n="case2.desc">Front-end architecture for an aerospace application managing airplane parts — Angular &amp; React dashboards. Refactored the render-critical path with profiling and lazy loading for a materially faster, calmer UI, and shipped it through Dockerized CI/CD on AWS.</p>
             <div class="tags"><span>React</span><span>Angular</span><span>TypeScript</span><span>Docker</span><span>CI/CD</span><span>AWS</span></div>
           </div>
           <div class="case-metrics">
-            <div class="case-metric"><span class="m-val">2.9→<em>1.4</em>s</span><span class="m-lbl">p75 LCP via code-splitting, lazy loading &amp; profiling</span></div>
-            <div class="case-metric"><span class="m-val"><em>−40</em>%</span><span class="m-lbl">load time on the render-critical React path</span></div>
-            <div class="case-metric"><span class="m-val">CI/CD</span><span class="m-lbl">Dockerized pipelines, deployed on AWS</span></div>
+            <div class="case-metric"><span class="m-val">2.9→<em>1.4</em>s</span><span class="m-lbl" data-i18n="case2.m1">p75 LCP via code-splitting, lazy loading &amp; profiling</span></div>
+            <div class="case-metric"><span class="m-val"><em>−40</em>%</span><span class="m-lbl" data-i18n="case2.m2">load time on the render-critical React path</span></div>
+            <div class="case-metric"><span class="m-val">CI/CD</span><span class="m-lbl" data-i18n="case2.m3">Dockerized pipelines, deployed on AWS</span></div>
           </div>
         </article>
 
         <!-- Case 3 -->
         <article class="case reveal">
           <div>
-            <div class="case-index">03 — 2017–2022 · SAP Labs, Bengaluru</div>
-            <h3>SAP Ariba &amp; CX Suite UI</h3>
-            <div class="role">Front-End Lead / Senior Developer (T3)</div>
-            <p>Designed a supplier-discovery UI that let users post and invite suppliers in three clicks, decomposed a monolith into shared micro-frontends, built the internal <span class="mono">seller-commons</span> library, and integrated Emarsys into SAP Marketing over SSO.</p>
+            <div class="case-index" data-i18n="case3.index">03 — 2017–2022 · SAP Labs, Bengaluru</div>
+            <h3 data-i18n="case3.title">SAP Ariba &amp; CX Suite UI</h3>
+            <div class="role" data-i18n="case3.role">Front-End Lead / Senior Developer (T3)</div>
+            <p data-i18n="case3.desc">Designed a supplier-discovery UI that let users post and invite suppliers in three clicks, decomposed a monolith into shared micro-frontends, built the internal <span class="mono">seller-commons</span> library, and integrated Emarsys into SAP Marketing over SSO.</p>
             <div class="tags"><span>React</span><span>Redux</span><span>Micro-frontends</span><span>SAPUI5</span><span>SSO</span><span>C#</span></div>
           </div>
           <div class="case-metrics">
-            <div class="case-metric"><span class="m-val"><em>95</em>%</span><span class="m-lbl">unit + E2E coverage (Jest/Cypress) → −20% incidents</span></div>
-            <div class="case-metric"><span class="m-val"><em>+25</em>%</span><span class="m-lbl">user engagement, −30% bug reports</span></div>
-            <div class="case-metric"><span class="m-val"><em>+10</em>%</span><span class="m-lbl">upsell from a 5-cloud field-extension app</span></div>
+            <div class="case-metric"><span class="m-val"><em>95</em>%</span><span class="m-lbl" data-i18n="case3.m1">unit + E2E coverage (Jest/Cypress) → −20% incidents</span></div>
+            <div class="case-metric"><span class="m-val"><em>+25</em>%</span><span class="m-lbl" data-i18n="case3.m2">user engagement, −30% bug reports</span></div>
+            <div class="case-metric"><span class="m-val"><em>+10</em>%</span><span class="m-lbl" data-i18n="case3.m3">upsell from a 5-cloud field-extension app</span></div>
           </div>
         </article>
 
         <!-- Case 4 -->
         <article class="case reveal">
           <div>
-            <div class="case-index">04 — SAP Labs · Platform leadership</div>
-            <h3>Legacy → React Migration</h3>
-            <div class="role">Leading a team of 8 engineers</div>
-            <p>Directed eight front-end engineers migrating an entire legacy application to a modern React framework, and re-sequenced independent API calls to run in parallel — collapsing a painful initial load and cutting long-term maintenance cost.</p>
+            <div class="case-index" data-i18n="case4.index">04 — SAP Labs · Platform leadership</div>
+            <h3 data-i18n="case4.title">Legacy → React Migration</h3>
+            <div class="role" data-i18n="case4.role">Leading a team of 8 engineers</div>
+            <p data-i18n="case4.desc">Directed eight front-end engineers migrating an entire legacy application to a modern React framework, and re-sequenced independent API calls to run in parallel — collapsing a painful initial load and cutting long-term maintenance cost.</p>
             <div class="tags"><span>React</span><span>Team lead</span><span>Migration</span><span>Performance</span><span>Code review</span><span>Agile</span></div>
           </div>
           <div class="case-metrics">
-            <div class="case-metric"><span class="m-val">6.1→<em>1.9</em>s</span><span class="m-lbl">initial load by parallelizing independent API calls</span></div>
-            <div class="case-metric"><span class="m-val"><em>+60</em>%</span><span class="m-lbl">UI responsiveness after the migration</span></div>
-            <div class="case-metric"><span class="m-val"><em>−30</em>%</span><span class="m-lbl">maintenance cost long-term</span></div>
+            <div class="case-metric"><span class="m-val">6.1→<em>1.9</em>s</span><span class="m-lbl" data-i18n="case4.m1">initial load by parallelizing independent API calls</span></div>
+            <div class="case-metric"><span class="m-val"><em>+60</em>%</span><span class="m-lbl" data-i18n="case4.m2">UI responsiveness after the migration</span></div>
+            <div class="case-metric"><span class="m-val"><em>−30</em>%</span><span class="m-lbl" data-i18n="case4.m3">maintenance cost long-term</span></div>
           </div>
         </article>
       </div>
@@ -191,12 +192,12 @@
   <!-- ================= FLAGSHIP ================= -->
   <section class="section" id="flagship">
     <div class="wrap">
-      <p class="eyebrow reveal">Currently building</p>
-      <h2 class="section-title reveal">A product, in the open.</h2>
+      <p class="eyebrow reveal" data-i18n="flagship.eyebrow">Currently building</p>
+      <h2 class="section-title reveal" data-i18n="flagship.title">A product, in the open.</h2>
       <div class="flagship reveal">
-        <span class="badge"><span class="pulse"></span> In progress</span>
-        <h3>An AI workflow tool for software teams.</h3>
-        <p>
+        <span class="badge" data-i18n="flagship.badge"><span class="pulse"></span> In progress</span>
+        <h3 data-i18n="flagship.h3">An AI workflow tool for software teams.</h3>
+        <p data-i18n="flagship.p">
           Turning my enterprise frontend background into a product: an AI-assisted workspace that
           drafts, summarizes, and routes engineering work — streaming LLM responses, retrieval over
           team docs, and evals to keep answers grounded. Built the way I'd build any product:
@@ -212,13 +213,13 @@
   <!-- ================= APPROACH ================= -->
   <section class="section" id="approach">
     <div class="wrap">
-      <p class="eyebrow reveal">How I work</p>
-      <h2 class="section-title reveal">Senior habits, not just senior years.</h2>
+      <p class="eyebrow reveal" data-i18n="approach.eyebrow">How I work</p>
+      <h2 class="section-title reveal" data-i18n="approach.title">Senior habits, not just senior years.</h2>
       <div class="approach-grid">
-        <div class="pillar reveal"><div class="num">01</div><h4>Architecture first</h4><p>Design systems, micro-frontends, rendering and state boundaries chosen for how the product will grow — not just today's screen.</p></div>
-        <div class="pillar reveal"><div class="num">02</div><h4>Performance as a feature</h4><p>Core Web Vitals treated as budgets. Profiling, code-splitting, and parallelization with measured p75 deltas, not vibes.</p></div>
-        <div class="pillar reveal"><div class="num">03</div><h4>Tested &amp; observable</h4><p>TDD where it counts, unit + E2E coverage, and instrumentation so regressions show up before users do.</p></div>
-        <div class="pillar reveal"><div class="num">04</div><h4>AI-augmented delivery</h4><p>Shipping with agentic workflows and evals — using AI to move faster while keeping a senior engineer's judgment in the loop.</p></div>
+        <div class="pillar reveal"><div class="num">01</div><h4 data-i18n="approach.p1h">Architecture first</h4><p data-i18n="approach.p1">Design systems, micro-frontends, rendering and state boundaries chosen for how the product will grow — not just today's screen.</p></div>
+        <div class="pillar reveal"><div class="num">02</div><h4 data-i18n="approach.p2h">Performance as a feature</h4><p data-i18n="approach.p2">Core Web Vitals treated as budgets. Profiling, code-splitting, and parallelization with measured p75 deltas, not vibes.</p></div>
+        <div class="pillar reveal"><div class="num">03</div><h4 data-i18n="approach.p3h">Tested &amp; observable</h4><p data-i18n="approach.p3">TDD where it counts, unit + E2E coverage, and instrumentation so regressions show up before users do.</p></div>
+        <div class="pillar reveal"><div class="num">04</div><h4 data-i18n="approach.p4h">AI-augmented delivery</h4><p data-i18n="approach.p4">Shipping with agentic workflows and evals — using AI to move faster while keeping a senior engineer's judgment in the loop.</p></div>
       </div>
     </div>
   </section>
@@ -228,10 +229,10 @@
     <div class="wrap">
       <div class="ai-shell">
         <div class="ai-copy">
-          <p class="eyebrow reveal">Interactive</p>
-          <h2 class="reveal">Ask my portfolio anything.</h2>
-          <p class="reveal">Instead of a wall of text, ask a question. This chat is powered by an LLM through a small serverless proxy I wrote — a live demo of the AI product work I do, running on my own site.</p>
-          <p class="note reveal">Frontend widget + Cloudflare Worker proxy · streaming responses · key stays server-side.</p>
+          <p class="eyebrow reveal" data-i18n="ask.eyebrow">Interactive</p>
+          <h2 class="reveal" data-i18n="ask.h2">Ask my portfolio anything.</h2>
+          <p class="reveal" data-i18n="ask.p1">Instead of a wall of text, ask a question. This chat is powered by an LLM through a small serverless proxy I wrote — a live demo of the AI product work I do, running on my own site.</p>
+          <p class="note reveal" data-i18n="ask.note">Frontend widget + Cloudflare Worker proxy · streaming responses · key stays server-side.</p>
         </div>
         <div id="ai-mount" class="reveal" aria-label="Ask my portfolio — AI chat"></div>
       </div>
@@ -241,19 +242,19 @@
   <!-- ================= ABOUT ================= -->
   <section class="section" id="about">
     <div class="wrap">
-      <p class="eyebrow reveal">About</p>
+      <p class="eyebrow reveal" data-i18n="about.eyebrow">About</p>
       <div class="about-grid">
         <div class="about-body reveal">
-          <h2 class="section-title" style="margin-bottom:24px">Twelve years of building. Still building.</h2>
-          <p>I started in 2014 and have spent my career close to the code — <strong>enterprise applications at scale, Angular and React, design systems, micro-frontends, performance work, and leading engineers</strong> at SAP Labs and, today, on an aerospace platform at Adda Tech in Laval.</p>
-          <p>What I actually enjoy is <strong>solving hard technical problems and shipping polished products</strong> — not climbing an org chart. So I'm deepening frontend architecture and folding practical AI into how I build, aiming squarely at product engineering.</p>
-          <p>Right now that means turning a decade of frontend depth into <strong>AI-powered products</strong>, built end-to-end with the same discipline I bring to enterprise work.</p>
+          <h2 class="section-title" style="margin-bottom:24px" data-i18n="about.title">Twelve years of building. Still building.</h2>
+          <p data-i18n="about.p1">I started in 2014 and have spent my career close to the code — <strong>enterprise applications at scale, Angular and React, design systems, micro-frontends, performance work, and leading engineers</strong> at SAP Labs and, today, on an aerospace platform at Adda Tech in Laval.</p>
+          <p data-i18n="about.p2">What I actually enjoy is <strong>solving hard technical problems and shipping polished products</strong> — not climbing an org chart. So I'm deepening frontend architecture and folding practical AI into how I build, aiming squarely at product engineering.</p>
+          <p data-i18n="about.p3">Right now that means turning a decade of frontend depth into <strong>AI-powered products</strong>, built end-to-end with the same discipline I bring to enterprise work.</p>
         </div>
         <div class="timeline reveal" aria-label="Career timeline">
-          <div class="tl-item"><span class="tl-year">2022→</span><span><span class="tl-role">Senior Software Engineer</span><br /><span class="tl-org">Adda Tech · Laval, QC</span></span></div>
-          <div class="tl-item"><span class="tl-year">2017–22</span><span><span class="tl-role">Front-End Lead / Senior Dev (T3)</span><br /><span class="tl-org">SAP Labs · Bengaluru</span></span></div>
-          <div class="tl-item"><span class="tl-year">2014–17</span><span><span class="tl-role">Associate Programming Analyst</span><br /><span class="tl-org">Wipro Technologies · Bangalore</span></span></div>
-          <div class="tl-item"><span class="tl-year">2014</span><span><span class="tl-role">B.E. Computer Science</span><br /><span class="tl-org">Chitkara University</span></span></div>
+          <div class="tl-item"><span class="tl-year">2022→</span><span><span class="tl-role" data-i18n="tl1.role">Senior Software Engineer</span><br /><span class="tl-org">Adda Tech · Laval, QC</span></span></div>
+          <div class="tl-item"><span class="tl-year">2017–22</span><span><span class="tl-role" data-i18n="tl2.role">Front-End Lead / Senior Dev (T3)</span><br /><span class="tl-org">SAP Labs · Bengaluru</span></span></div>
+          <div class="tl-item"><span class="tl-year">2014–17</span><span><span class="tl-role" data-i18n="tl3.role">Associate Programming Analyst</span><br /><span class="tl-org">Wipro Technologies · Bangalore</span></span></div>
+          <div class="tl-item"><span class="tl-year">2014</span><span><span class="tl-role" data-i18n="tl4.role">B.E. Computer Science</span><br /><span class="tl-org">Chitkara University</span></span></div>
         </div>
       </div>
     </div>
@@ -262,9 +263,9 @@
   <!-- ================= CONTACT ================= -->
   <section class="section contact" id="contact">
     <div class="wrap">
-      <p class="eyebrow reveal" style="justify-content:center">Let's talk</p>
-      <h2 class="reveal">Building something<br />that needs a frontend lead?</h2>
-      <p class="lead reveal">Open to Lead Frontend / Frontend Architect roles, founding-engineer conversations, and product collaborations.</p>
+      <p class="eyebrow reveal" style="justify-content:center" data-i18n="contact.eyebrow">Let's talk</p>
+      <h2 class="reveal" data-i18n="contact.h2">Building something<br />that needs a frontend lead?</h2>
+      <p class="lead reveal" data-i18n="contact.lead">Open to Lead Frontend / Frontend Architect roles, founding-engineer conversations, and product collaborations.</p>
       <div class="contact-links reveal">
         <a class="btn btn-primary" href="mailto:randhawa_gagan@outlook.com">randhawa_gagan@outlook.com</a>
         <a class="btn btn-ghost" href="https://www.linkedin.com/in/gaganrandhawa91" target="_blank" rel="noopener">LinkedIn</a>
@@ -276,7 +277,7 @@
   <footer class="foot">
     <div class="foot-inner">
       <span>© <span id="year"></span> Gagan Randhawa · Montréal, QC</span>
-      <span>Built with Three.js + a hand-written AI proxy · no template</span>
+      <span data-i18n="foot.built">Built with Three.js + a hand-written AI proxy · no template</span>
     </div>
   </footer>
 

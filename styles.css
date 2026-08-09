@@ -140,6 +140,7 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; letter-spacing:
   color: var(--muted); cursor: pointer; display: grid; place-items: center; transition: color 0.2s, border-color 0.2s;
 }
 .icon-btn:hover { color: var(--ink); border-color: var(--ink); }
+.lang-toggle { width: auto; min-width: 34px; padding: 0 10px; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.06em; }
 @media (max-width: 760px) { .nav-links { display: none; } }
 
 /* =========================================================================

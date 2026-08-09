@@ -116,6 +116,50 @@ const SUGGESTIONS = [
   "Is he a fit for a Lead Frontend role?",
 ];
 
+/* ------------------------------------------------------------------ *
+ * Localized widget UI strings (EN/FR). The live AI *answers* stay in
+ * English (the Worker's system prompt is English) — only the widget's
+ * own chrome (greeting, chips, placeholder, labels) is translated.
+ * ------------------------------------------------------------------ */
+const UI_STRINGS = {
+  en: {
+    title: "Ask my portfolio",
+    live: "live",
+    demo: "demo",
+    srLabel: "Ask a question about Gagan",
+    placeholder: "Ask about Gagan's skills, SAP work, fit for a role…",
+    send: "Send",
+    greeting: FALLBACK_INTRO,
+    chips: SUGGESTIONS,
+  },
+  fr: {
+    title: "Interroger mon portfolio",
+    live: "en direct",
+    demo: "démo",
+    srLabel: "Posez une question sur Gagan",
+    placeholder: "Posez une question : compétences, travail chez SAP, adéquation à un poste…",
+    send: "Envoyer",
+    greeting:
+      "Bonjour ! Je suis l'assistant du portfolio de Gagan. Posez-moi des questions sur ses compétences, son travail chez SAP et dans l'aérospatiale, ou son adéquation à un poste de responsable frontend.",
+    chips: [
+      "Quelle est la plus grande force de Gagan ?",
+      "Parlez-moi du travail chez SAP",
+      "Est-il fait pour un poste de responsable frontend ?",
+    ],
+  },
+};
+
+/** Read the current widget language from storage (default "en"). */
+function readLang() {
+  try {
+    const l = localStorage.getItem("gr-lang");
+    if (l === "fr" || l === "en") return l;
+  } catch (_) {
+    /* ignore */
+  }
+  return "en";
+}
+
 /** Pick a canned answer by keyword match. */
 function matchFallback(question) {
   const q = question.toLowerCase();
@@ -347,6 +391,9 @@ export function initAiChat(rootEl, opts = {}) {
   const endpoint = (opts.endpoint || "").trim();
   const isLive = Boolean(endpoint);
 
+  let lang = readLang();
+  const t = () => UI_STRINGS[lang] || UI_STRINGS.en;
+
   ensureStyles();
 
   /* --- Conversation state (sent verbatim to the Worker each turn) --- */
@@ -360,21 +407,21 @@ export function initAiChat(rootEl, opts = {}) {
   wrap.innerHTML = `
     <div class="aichat__header">
       <span class="aichat__dot" aria-hidden="true"></span>
-      <h2 class="aichat__title">Ask my portfolio</h2>
-      <p class="aichat__subtitle">${isLive ? "live" : "demo"}</p>
+      <h2 class="aichat__title">${t().title}</h2>
+      <p class="aichat__subtitle">${isLive ? t().live : t().demo}</p>
     </div>
     <div class="aichat__log" role="log" aria-live="polite" aria-label="Chat conversation"></div>
     <div class="aichat__chips" role="group" aria-label="Suggested questions"></div>
     <form class="aichat__form">
-      <label class="aichat__sr-only" for="aichat-input">Ask a question about Gagan</label>
+      <label class="aichat__sr-only" for="aichat-input">${t().srLabel}</label>
       <input
         id="aichat-input"
         class="aichat__input"
         type="text"
         autocomplete="off"
-        placeholder="Ask about Gagan's skills, SAP work, fit for a role…"
+        placeholder="${t().placeholder}"
       />
-      <button class="aichat__send" type="submit">Send</button>
+      <button class="aichat__send" type="submit">${t().send}</button>
     </form>
   `;
   rootEl.appendChild(wrap);
@@ -384,16 +431,20 @@ export function initAiChat(rootEl, opts = {}) {
   const formEl = wrap.querySelector(".aichat__form");
   const inputEl = wrap.querySelector(".aichat__input");
   const sendEl = wrap.querySelector(".aichat__send");
+  const titleEl = wrap.querySelector(".aichat__title");
+  const srLabelEl = wrap.querySelector(".aichat__sr-only");
 
   /* --- Suggestion chips ------------------------------------------ */
-  const chipButtons = SUGGESTIONS.map((q) => {
+  // The chip's own (localized) text is used as the question on click, so
+  // re-labelling chips on a language switch keeps them fully functional.
+  const chipButtons = t().chips.map((q) => {
     const chip = document.createElement("button");
     chip.type = "button";
     chip.className = "aichat__chip";
     chip.textContent = q;
     chip.addEventListener("click", () => {
       if (busy) return;
-      inputEl.value = q;
+      inputEl.value = chip.textContent;
       submit();
     });
     chipsEl.appendChild(chip);
@@ -552,10 +603,28 @@ export function initAiChat(rootEl, opts = {}) {
   formEl.addEventListener("submit", onSubmit);
 
   // Greet the user so the panel is never empty.
-  addBubble("bot", FALLBACK_INTRO);
+  const greetingEl = addBubble("bot", t().greeting);
 
   /* --- Public API ------------------------------------------------ */
   return {
+    /**
+     * Switch the widget's UI language. Re-labels the greeting, chips,
+     * placeholder, title and controls. Live AI answers stay English.
+     * @param {"en"|"fr"} next
+     */
+    setLang(next) {
+      if (next !== "en" && next !== "fr") return;
+      lang = next;
+      const s = t();
+      titleEl.textContent = s.title;
+      if (srLabelEl) srLabelEl.textContent = s.srLabel;
+      inputEl.placeholder = s.placeholder;
+      sendEl.textContent = s.send;
+      if (greetingEl) greetingEl.textContent = s.greeting;
+      chipButtons.forEach((chip, i) => {
+        if (s.chips[i]) chip.textContent = s.chips[i];
+      });
+    },
     /** Remove listeners, cancel in-flight work, and clear the DOM. */
     destroy() {
       formEl.removeEventListener("submit", onSubmit);

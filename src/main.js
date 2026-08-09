@@ -9,9 +9,29 @@
 // Leave empty ("") to run the on-page chat in scripted-fallback mode.
 const AI_ENDPOINT = "https://ask-my-portfolio.gagzy-randhawa.workers.dev";
 
+import { initLang, applyLang } from "./i18n.js";
+
 // Holds the Three.js hero API once it's initialized, so the theme toggle
 // can recolor the hero live.
 let heroApi = null;
+// Holds the AI chat API so the language toggle can re-render its UI strings.
+let chatApi = null;
+
+/* ---- Language (EN ⇄ FR), persisted ---- */
+(function language() {
+  let lang = initLang();
+  applyLang(lang);
+  const btn = document.getElementById("lang-toggle");
+  if (!btn) return;
+  const paint = () => { btn.textContent = lang.toUpperCase(); };
+  paint();
+  btn.addEventListener("click", () => {
+    lang = lang === "en" ? "fr" : "en";
+    applyLang(lang);
+    paint();
+    if (chatApi && chatApi.setLang) chatApi.setLang(lang);
+  });
+})();
 
 /* ---- Theme toggle (persisted) ---- */
 (function theme() {
@@ -115,7 +135,7 @@ if (yearEl) yearEl.textContent = String(new Date().getFullYear());
   if (!mount) return;
   try {
     const { initAiChat } = await import("./ai-chat.js");
-    initAiChat(mount, { endpoint: AI_ENDPOINT });
+    chatApi = initAiChat(mount, { endpoint: AI_ENDPOINT });
   } catch (err) {
     console.warn("[ai-chat] widget unavailable:", err);
     mount.innerHTML =
