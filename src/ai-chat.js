@@ -55,7 +55,7 @@ const FALLBACK_ANSWERS_EN = [
   {
     keywords: ["aerospace", "adda", "c#", "csharp"],
     text:
-      "At Adda Tech he worked on aerospace software, pairing a React/" +
+      "At Adda Tech, where he is a Squad Lead, he works on aerospace software, pairing a React/" +
       "TypeScript frontend with a C# backend. Aerospace means high " +
       "correctness bars and dense, data-heavy interfaces — good training for " +
       "building UIs that stay clear and reliable under real complexity.",
@@ -88,7 +88,7 @@ const FALLBACK_ANSWERS_EN = [
   {
     keywords: ["experience", "years", "background", "who", "about"],
     text:
-      "Gagan Randhawa is a Senior Frontend Engineer / Frontend Architect with " +
+      "Gagan Randhawa is a Squad Lead and Frontend Architect with " +
       "12+ years of experience. He's ex-SAP Labs, has shipped aerospace " +
       "software at Adda Tech, works primarily in React, Angular, and " +
       "TypeScript, and is now building AI-powered products. His strengths are " +
@@ -120,7 +120,7 @@ const FALLBACK_ANSWERS_FR = [
   },
   {
     keywords: ["aérospatiale", "aerospatiale", "adda", "c#", "csharp"],
-    text: "Chez Adda Tech, Gagan a travaillé sur un logiciel aérospatial avec un frontend React et TypeScript et un backend C#. Ce domaine exige des interfaces fiables, précises et capables de rendre des données complexes faciles à comprendre.",
+    text: "Chez Adda Tech, où il est chef d'équipe, Gagan travaille sur un logiciel aérospatial avec un frontend React et TypeScript et un backend C#. Ce domaine exige des interfaces fiables, précises et capables de rendre des données complexes faciles à comprendre.",
   },
   {
     keywords: ["lead", "responsable", "architecte", "poste", "adéquation", "adequation"],
@@ -136,7 +136,7 @@ const FALLBACK_ANSWERS_FR = [
   },
   {
     keywords: ["expérience", "experience", "parcours", "qui", "profil"],
-    text: "Gagan Randhawa est ingénieur frontend senior et architecte frontend avec plus de 12 ans d'expérience. Ancien de SAP Labs, il développe aujourd'hui des logiciels aérospatiaux chez Adda Tech et construit des produits propulsés par l'IA.",
+    text: "Gagan Randhawa est chef d'équipe et architecte frontend avec plus de 12 ans d'expérience. Ancien de SAP Labs, il dirige aujourd'hui une équipe chez Adda Tech, développe des logiciels aérospatiaux et construit des produits propulsés par l'IA.",
   },
   {
     keywords: ["contact", "courriel", "email", "joindre", "embaucher", "disponible"],

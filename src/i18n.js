@@ -60,7 +60,7 @@ export const translations = {
     /* Case 1 — ClinicMaster */
     "case1.index": "01 — 2022–present · Adda Tech, Montréal",
     "case1.title": "ClinicMaster — Healthcare SaaS",
-    "case1.role": "Senior Software Engineer · flagship product front-end",
+    "case1.role": "Squad Lead · flagship product front-end",
     "case1.desc":
       "Adda Tech's flagship: a cloud platform running scheduling, charting, billing, and analytics for multi-location clinic networks (physio, mental health, sleep, aesthetics). I built the front-end architecture — a reusable component library, Redux + TypeScript state, and per-franchise PWA theming — for a SOC&nbsp;2 / HIPAA / Québec&nbsp;Law&nbsp;25-compliant product on Azure.",
     "case1.m1": "feature delivery time with a 40+ component design-system library",
@@ -70,7 +70,7 @@ export const translations = {
     /* Case 2 — Aerospace */
     "case2.index": "02 — 2022–present · Adda Tech, Montréal",
     "case2.title": "Aerospace Parts Platform",
-    "case2.role": "Senior Software Engineer · Front-end lead",
+    "case2.role": "Squad Lead · Front-end architecture",
     "case2.desc":
       "Front-end architecture for an aerospace application managing airplane parts — Angular &amp; React dashboards. Refactored the render-critical path with profiling and lazy loading for a materially faster, calmer UI, and shipped it through Dockerized CI/CD on AWS.",
     "case2.m1": "p75 LCP via code-splitting, lazy loading &amp; profiling",
@@ -136,14 +136,14 @@ export const translations = {
     "about.eyebrow": "About",
     "about.title": "Twelve years deep. Still curious.",
     "about.p1":
-      "I started in 2014 and have spent my career close to the code — <strong>enterprise applications at scale, Angular and React, design systems, micro-frontends, performance work, and leading engineers</strong> at SAP Labs and, today, on an aerospace platform at Adda Tech in Laval.",
+      "I started in 2014 and have spent my career close to the code — <strong>enterprise applications at scale, Angular and React, design systems, micro-frontends, performance work, and leading engineers</strong> at SAP Labs and, today, as a Squad Lead at Adda Tech in Laval.",
     "about.p2":
       "What I actually enjoy is <strong>solving hard technical problems and shipping polished products</strong> — not climbing an org chart. So I'm deepening frontend architecture and folding practical AI into how I build, aiming squarely at product engineering.",
     "about.p3":
       "Right now that means turning a decade of frontend depth into <strong>AI-powered products</strong>, built end-to-end with the same discipline I bring to enterprise work.",
 
     /* Timeline roles */
-    "tl1.role": "Senior Software Engineer",
+    "tl1.role": "Squad Lead",
     "tl2.role": "Front-End Lead / Senior Dev (T3)",
     "tl3.role": "Associate Programming Analyst",
     "tl4.role": "B.E. Computer Science",
@@ -213,7 +213,7 @@ export const translations = {
     /* Case 1 — ClinicMaster */
     "case1.index": "01 — 2022–aujourd'hui · Adda Tech, Montréal",
     "case1.title": "ClinicMaster — SaaS santé",
-    "case1.role": "Ingénieur logiciel senior · front-end du produit phare",
+    "case1.role": "Chef d'équipe · front-end du produit phare",
     "case1.desc":
       "Le produit phare d'Adda Tech : une plateforme infonuagique gérant la prise de rendez-vous, les dossiers, la facturation et l'analytique pour des réseaux de cliniques multi-sites (physio, santé mentale, sommeil, esthétique). J'ai bâti l'architecture front-end — une bibliothèque de composants réutilisables, un état Redux + TypeScript et un thème PWA par franchise — pour un produit conforme à SOC&nbsp;2 / HIPAA / la Loi&nbsp;25 du Québec, sur Azure.",
     "case1.m1":
@@ -225,7 +225,7 @@ export const translations = {
     /* Case 2 — Aerospace */
     "case2.index": "02 — 2022–aujourd'hui · Adda Tech, Montréal",
     "case2.title": "Plateforme de pièces aérospatiales",
-    "case2.role": "Ingénieur logiciel senior · Responsable front-end",
+    "case2.role": "Chef d'équipe · Architecture front-end",
     "case2.desc":
       "Architecture front-end d'une application aérospatiale gérant des pièces d'avion — tableaux de bord Angular &amp; React. J'ai refactorisé le chemin critique de rendu avec du profilage et du chargement différé pour une interface nettement plus rapide et plus posée, livrée via un CI/CD dockerisé sur AWS.",
     "case2.m1": "p75 LCP grâce au fractionnement de code, au chargement différé &amp; au profilage",
@@ -291,14 +291,14 @@ export const translations = {
     "about.eyebrow": "À propos",
     "about.title": "Douze ans d'expertise. Toujours curieux.",
     "about.p1":
-      "J'ai débuté en 2014 et j'ai passé ma carrière au plus près du code — <strong>applications d'entreprise à grande échelle, Angular et React, design systems, micro-frontends, travail de performance et encadrement d'ingénieurs</strong> chez SAP Labs et, aujourd'hui, sur une plateforme aérospatiale chez Adda Tech à Laval.",
+      "J'ai débuté en 2014 et j'ai passé ma carrière au plus près du code — <strong>applications d'entreprise à grande échelle, Angular et React, design systems, micro-frontends, travail de performance et encadrement d'ingénieurs</strong> chez SAP Labs et, aujourd'hui, comme chef d'équipe chez Adda Tech à Laval.",
     "about.p2":
       "Ce que j'aime vraiment, c'est <strong>résoudre des problèmes techniques difficiles et livrer des produits soignés</strong> — pas gravir un organigramme. Alors j'approfondis l'architecture frontend et j'intègre l'IA pratique à ma façon de bâtir, en visant carrément l'ingénierie de produit.",
     "about.p3":
       "En ce moment, ça veut dire transformer une décennie d'expertise frontend en <strong>produits propulsés par l'IA</strong>, construits de bout en bout avec la même rigueur que j'apporte au travail d'entreprise.",
 
     /* Timeline roles */
-    "tl1.role": "Ingénieur logiciel senior",
+    "tl1.role": "Chef d'équipe (Squad Lead)",
     "tl2.role": "Responsable front-end / Dév. senior (T3)",
     "tl3.role": "Analyste-programmeur associé",
     "tl4.role": "B.E. en informatique",
